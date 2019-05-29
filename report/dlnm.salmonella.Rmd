@@ -1,5 +1,5 @@
 ---
-title: Nonlinear and delay effects of climate on the risk of nontyphoid Salmonellosis and typhoid fever in Blantyre, Malawi; A Distributed Lag Non-linear Modelling Study.
+title: Nonlinear and delayed effects of climate on the risk of nontyphoid Salmonellosis and typhoid fever in Blantyre, Malawi; A Distributed Lag Non-linear Modelling Study.
 author: "By Deus Thindwa"
 date: "08/02/2019"
 output:
