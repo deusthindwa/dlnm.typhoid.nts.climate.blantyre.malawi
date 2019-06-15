@@ -178,10 +178,10 @@ rm(list=ls()[grep("^trend_n", ls())])
 
 ##### Plots of decomposed series (Supplementary Figure 1)
 ```{r DecomposedTS, results="hide", message=FALSE, warning=FALSE, fig.width=10, fig.height=5, fig.align='center'}
-x<-case.iNTS.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE)+theme_bw()
-y<-case.typhi.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE)+theme_bw()
-z<-climate.rain.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE)+theme_bw()
-v<-climate.temp.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE)+theme_bw()
+x<- mstl(case.iNTS.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE)+theme_bw()
+y<- mstl(case.typhi.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE)+theme_bw()
+z<- mstl(climate.rain.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE)+theme_bw()
+v<- mstl(climate.temp.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE)+theme_bw()
 grid.arrange(grobs=list(x,y,z,v), ncol=4, nrow=1)
 ```
 

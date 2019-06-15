@@ -103,32 +103,32 @@ climate.rain <-tk_tbl(climate.rain, preserve_index = TRUE, rename_index = "date"
 climate.temp <-tk_tbl(climate.temp, preserve_index = TRUE, rename_index = "date") 
 
 #seasonally-adjusted cases and climate
-case.iNTS.ts <- ts(na.omit(case.iNTS$case_count), frequency = 12)
-trend_n <-tk_tbl(exp(seasadj(mstl(log(case.iNTS.ts)))), preserve_index = FALSE) #multiplicative series (log-transform); already has at least 1 NTS case.
+case.iNTS.ts <- ts(na.omit(case.iNTS$case_count), frequency=12)
+trend_n <-tk_tbl(exp(seasadj(mstl(log(case.iNTS.ts),s.window='periodic'))), preserve_index = FALSE) #multiplicative series (log-transform); already has at least 1 NTS case.
 case.iNTS$case_count_sea <- trend_n$value  #seasonally-adjusted cases: trend+remainder
 case.iNTS$case_count_sea[case.iNTS$case_count_sea < 0] <- 0
 setnames(case.iNTS, old="case_count", new="case_count_obs")
 trend_n <- tk_tbl(exp(mstl(log(case.iNTS.ts))))
 case.iNTS$case_count_tre <- trend_n$Trend #trend of cases: trend-only
 
-case.typhi.ts <- ts(na.omit(case.typhi$case_count), frequency = 12)
-trend_n <-tk_tbl(exp(seasadj(mstl(log(case.typhi.ts+1)))), preserve_index = FALSE) #multiplicative series (log-transform); add 1 since log(0) is not defined.
+case.typhi.ts <- ts(na.omit(case.typhi$case_count), frequency=12)
+trend_n <-tk_tbl(exp(seasadj(mstl(log(case.typhi.ts+1),s.window='periodic'))), preserve_index = FALSE) #multiplicative series (log-transform); add 1 since log(0) is not defined.
 case.typhi$case_count_sea <- trend_n$value #seasonally-adjusted cases: trend+remainder
 case.typhi$case_count_sea[case.typhi$case_count_sea < 0] <- 0
 setnames(case.typhi, old="case_count", new="case_count_obs")
 trend_n <- tk_tbl(exp(mstl(log(case.typhi.ts+1))))
 case.typhi$case_count_tre <- trend_n$Trend #trend of cases: trend-only
 
-climate.rain.ts <- ts(na.omit(climate.rain$rainfall), frequency = 12)
-trend_n <-tk_tbl(seasadj(mstl(climate.rain.ts)), preserve_index = FALSE) #additive series
+climate.rain.ts <- ts(na.omit(climate.rain$rainfall), frequency=12)
+trend_n <-tk_tbl(seasadj(mstl(climate.rain.ts,s.window='periodic')), preserve_index = FALSE) #additive series
 climate.rain$rainfall_sea <- trend_n$value #seasonally-adjusted rainfall: trend+remainder
 climate.rain$rainfall_sea[climate.rain$rainfall_sea < 0] <- 0
 setnames(climate.rain, old="rainfall", new="rainfall_obs")
 trend_n <- tk_tbl(mstl(climate.rain.ts))
 climate.rain$rain_tre <- trend_n$Trend #trend of cases: trend-only
 
-climate.temp.ts <- ts(na.omit(climate.temp$temperature), frequency = 12)
-trend_n <-tk_tbl(seasadj(mstl(climate.temp.ts)), preserve_index = FALSE) #additive series
+climate.temp.ts <- ts(na.omit(climate.temp$temperature), frequency=12)
+trend_n <-tk_tbl(seasadj(mstl(climate.temp.ts,s.window='periodic')), preserve_index = FALSE) #additive series
 climate.temp$temperature_sea <- trend_n$value #seasonally-adjusted temperature: trend+remainder
 climate.temp$temperature_sea[climate.temp$temperature_sea < 0] <- 0
 setnames(climate.temp, old="temperature", new="temperature_obs")
@@ -136,17 +136,17 @@ trend_n <- tk_tbl(mstl(climate.temp.ts))
 climate.temp$temp_tre <- trend_n$Trend #trend of cases: trend-only
 
 #plot decomposed all series
-x<-case.iNTS.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE) + theme_bw()
-y<-case.typhi.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE) + theme_bw()
-z<-climate.rain.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE) + theme_bw()
-v<-climate.temp.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE) + theme_bw()
+x<-mstl(case.iNTS.ts,s.window=13) %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE) + theme_bw()
+y<-mstl(case.typhi.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE) + theme_bw()
+z<-mstl(climate.rain.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE) + theme_bw()
+v<-mstl(climate.temp.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE) + theme_bw()
 grid.arrange(grobs=list(x,y,z,v), ncol=4, nrow=1)
 
 #plot all seasonally-adjusted series
 S1<-ggplot(as.data.frame(case.iNTS)) + 
   geom_line(aes(date, case_count_obs, color="Original"), size=0.8) + 
-  geom_line(aes(date, case_count_sea, color="Seasonally-adjusted"), size=0.8) + 
-  scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="orange2")) +
+  geom_line(aes(date, case_count_sea, color="Seasonal-adjusted"), size=0.8) + 
+  scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="orange2")) +
   labs(title="A", x ="", y = "NTS cases") + 
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
@@ -158,8 +158,8 @@ S1<-ggplot(as.data.frame(case.iNTS)) +
 
 S2<-ggplot(as.data.frame(case.typhi)) + 
   geom_line(aes(date, case_count_obs, color="Original"), size=0.8) + 
-  geom_line(aes(date, case_count_sea, color="Seasonally-adjusted"), size=0.8) + 
-  scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="red2")) +
+  geom_line(aes(date, case_count_sea, color="Seasonal-adjusted"), size=0.8) + 
+  scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="red2")) +
   labs(title="B", x ="", y = "Typhoid cases") + 
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
@@ -171,8 +171,8 @@ S2<-ggplot(as.data.frame(case.typhi)) +
 
 S3<-ggplot(as.data.frame(climate.rain)) + 
   geom_line(aes(date, rainfall_obs, color="Original"), size=0.8) + 
-  geom_line(aes(date, rainfall_sea, color="Seasonally-adjusted"), size=0.8) + 
-  scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="blue2")) +
+  geom_line(aes(date, rainfall_sea, color="Seasonal-adjusted"), size=0.8) + 
+  scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="blue2")) +
   labs(title="C", x ="Year", y = "Rainfall (mm)") + 
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
@@ -184,8 +184,8 @@ S3<-ggplot(as.data.frame(climate.rain)) +
 
 S4<-ggplot(as.data.frame(climate.temp)) + 
   geom_line(aes(date, temperature_obs, color="Original"), size=0.8) + 
-  geom_line(aes(date, temperature_sea, color="Seasonally-adjusted"), size=0.8) + 
-  scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="green2")) + 
+  geom_line(aes(date, temperature_sea, color="Seasonal-adjusted"), size=0.8) + 
+  scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="green2")) + 
   labs(title="D", x ="Year", y = "Temperature (°C)") + 
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
@@ -195,7 +195,7 @@ S4<-ggplot(as.data.frame(climate.temp)) +
   theme(legend.key.height=unit(1,"line")) + 
   theme(legend.key.width=unit(1,"line"))
 
-grid.arrange(grobs=list(S1, S2, S3, S4), ncol=2, nrow=2)
+grid.arrange(grobs=list(S1, S2), ncol=2, nrow=1)
 rm(list = ls()[grep("^trend_n", ls())])
 
 #linear interpolation and extrapolation
