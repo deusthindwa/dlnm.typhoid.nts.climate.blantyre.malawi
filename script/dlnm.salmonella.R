@@ -1,4 +1,3 @@
-
 #02/08/2018-30/11/2018
 #by Deus Thindwa
 
@@ -112,7 +111,7 @@ setnames(case.iNTS, old="case_count", new="case_count_obs")
 trend_n <- tk_tbl(exp(mstl(log(case.iNTS.ts))))
 case.iNTS$case_count_tre <- trend_n$Trend #trend of cases: trend-only
 
-case.typhi.ts <- ts(na.d omit(case.typhi$case_count), frequency = 12)
+case.typhi.ts <- ts(na.omit(case.typhi$case_count), frequency = 12)
 trend_n <-tk_tbl(exp(seasadj(mstl(log(case.typhi.ts+1)))), preserve_index = FALSE) #multiplicative series (log-transform); add 1 since log(0) is not defined.
 case.typhi$case_count_sea <- trend_n$value #seasonally-adjusted cases: trend+remainder
 case.typhi$case_count_sea[case.typhi$case_count_sea < 0] <- 0

@@ -1,6 +1,5 @@
 ---
-title: Impact of Climate on the Risk of Non-typhoid Salmonellosis and Typhoid Fever
-  in Blantyre, Malawi; A Distributed Lag Non-linear Modelling Study.
+title: Nonlinear and delayed effects of climate on the risk of Salmonellosis in Blantyre, Malawi.
 author: "By Deus Thindwa"
 date: "08/02/2019"
 output:
@@ -19,7 +18,7 @@ output:
 
 ##### Load required packages for entire analysis
 ```{r LoadPackages, results='hide', message=FALSE, warning=FALSE}
-dlnm.pkg <- c("tidyverse", "lubridate","xts","ggthemes","PerformanceAnalytics","reshape2","rugarch","timetk","parallel","timeSeries","tseries","data.table","ggplot2","dlnm","broom","caret","gridExtra","splines","splines2","pspline","cowplot","mgcv","spi","chron","gridGraphics","grid","pscl","MASS", "AER", "Hmisc", "MuMIn", "VGAM", "forecast", "seasonal", "plotly", "ggmap", "rgeos", "tmap", "maptools", "maps", "ggfortify", "htmltools","webshot","knitr","flexdashboard", "imager", "httr", "curl", "here")
+dlnm.pkg <- c("tidyverse", "lubridate","xts","ggthemes","PerformanceAnalytics","reshape2","rugarch","timetk","parallel","timeSeries","tseries","data.table","ggplot2","dlnm","broom","caret","gridExtra","splines","splines2","pspline","cowplot","mgcv","spi","chron","gridGraphics","grid","pscl","MASS", "AER", "Hmisc", "MuMIn", "VGAM", "forecast", "seasonal", "plotly", "ggmap", "rgeos", "tmap", "maptools", "maps", "ggfortify", "htmltools","webshot","knitr","flexdashboard", "imager", "httr", "curl", "gmodels","jpeg","rgdal","raster","sp","here")
 
 lapply(dlnm.pkg, library, character.only=TRUE)
 ``` 
@@ -179,15 +178,15 @@ rm(list=ls()[grep("^trend_n", ls())])
 
 ##### Plots of decomposed series (Supplementary Figure 1)
 ```{r DecomposedTS, results="hide", message=FALSE, warning=FALSE, fig.width=10, fig.height=5, fig.align='center'}
-x<-case.iNTS.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE)+theme_bw()
-y<-case.typhi.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE)+theme_bw()
-z<-climate.rain.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE)+theme_bw()
-v<-climate.temp.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE)+theme_bw()
+x<- mstl(case.iNTS.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE)+theme_bw()
+y<- mstl(case.typhi.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE)+theme_bw()
+z<- mstl(climate.rain.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE)+theme_bw()
+v<- mstl(climate.temp.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE)+theme_bw()
 grid.arrange(grobs=list(x,y,z,v), ncol=4, nrow=1)
 ```
 
 ##### Plots of seasonal-adjusted incidences (Supplementary Figure 2)
-```{r SeasonAdjTS, results="hide", message=FALSE, warning=FALSE, fig.width=9, fig.height=5, fig.align='center'}
+```{r SeasonAdjTS, results="hide", message=FALSE, warning=FALSE, fig.width=9, fig.height=4, fig.align='center'}
 Th <- theme(plot.title=element_text(hjust=0)) + 
 theme(axis.title.x=element_text(size=10)) + 
 theme(axis.title.y=element_text(size=10)) +
@@ -199,7 +198,7 @@ S1 <- ggplot(as.data.frame(case.iNTS)) +
 geom_line(aes(date, case_count_obs, color="Original"), size=0.8) + 
 geom_line(aes(date, case_count_sea, color="Seasonal-adjusted"), size=0.8) + 
 scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="orange2")) +
-labs(title="A", x="", y="NTS cases") + theme(plot.title=element_text(hjust=0)) +
+labs(title="A", x="Year", y="NTS cases") + Th +
 theme(legend.justification=c(0.5,0), legend.position=c(0.7,0.7), legend.text=element_text(size=10), 
 legend.title=element_text(size=0))
 
@@ -207,7 +206,7 @@ S2<-ggplot(as.data.frame(case.typhi)) +
 geom_line(aes(date, case_count_obs, color="Original"), size=0.8) + 
 geom_line(aes(date, case_count_sea, color="Seasonal-adjusted"), size=0.8) + 
 scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="red2")) +
-labs(title="B", x ="", y="Typhoid cases") + Th +
+labs(title="B", x ="Year", y="Typhoid cases") + Th +
 theme(legend.justification=c(0.5,0), legend.position = c(0.3,0.7), legend.text = element_text(size = 10), 
 legend.title = element_text(size=0))
 
@@ -227,7 +226,7 @@ labs(title="D", x ="Year", y = "Temperature (°C)") + Th +
 theme(legend.justification=c(0.5,0), legend.position = c(0.3,0.7), legend.text = element_text(size = 10), 
 legend.title = element_text(size=0))
 
-grid.arrange(grobs=list(S1, S2, S3, S4), ncol=2, nrow=2)
+grid.arrange(grobs=list(S1, S2), ncol=2, nrow=1)
 ```
 
 ##### Inter/extraporate population denominators
@@ -264,62 +263,58 @@ case.typhi$incid_obs <-case.typhi$case_count_obs*100000/case.typhi$census
 ```
 
 ##### Plots of trends in NTS, typhoid, rain and temperature (Supplementary Figure 3)
-```{r CaseTrends, results="hide", message=FALSE, warning=FALSE, fig.width=10, fig.height=6, fig.align='center'}
+```{r CaseTrends, results="hide", message=FALSE, warning=FALSE, fig.width=10, fig.height=5, fig.align='center'}
 E1<-ggplot() + 
 geom_line(data=case.iNTS, aes(x=date, y=case_count_tre, color="Number of NTS cases"), stat="identity", size=1.0) + 
 geom_line(data=climate.rain, aes(x=date, y=rain_tre/0.04, color="Rainfall"), alpha=0.8, size=0.7) + 
-scale_y_continuous(sec.axis = sec_axis(~.*0.04, name="(mm)")) + theme_bw() +
+scale_y_continuous(sec.axis = sec_axis(~.*0.04, name="Rainfall (mm)")) + theme_bw() +
 scale_color_manual(values = c("Number of NTS cases"="orange2", "Rainfall"="blue2")) + 
-ggtitle("A") + ylab("Cases") + xlab("Month'Year") + 
+ggtitle("A") + ylab("NTS cases") + xlab("Month'Year") + 
 theme(axis.title.x = element_text(size=0), axis.title.y=element_text(size=10, color="orange2",face="bold"), 
 plot.title = element_text(hjust=0,face="bold")) +
 theme(axis.text.x=element_text(size=0), axis.title.y.right=element_text(color="blue2", size=10), 
 axis.text.y = element_text(face="bold", size=10)) + 
 scale_x_date(date_breaks = "24 month", date_labels ="%b'%y") +
-theme(legend.justification=c(0.5,0), legend.position=c(0.6,0.7), legend.text=element_text(size=10), 
-legend.title=element_text(size=0)) + theme(legend.key.height=unit(1,"line")) + theme(legend.key.width=unit(1,"line"))
+theme(legend.position="none")
 
 E2<-ggplot() + 
 geom_line(data=case.iNTS, aes(x=date, y=case_count_tre, color="Number of NTS cases"), stat="identity", size=1.0) + 
-geom_line(data=climate.temp, aes(x=date, y=temp_tre/0.4, color="Temperature"), alpha=0.8, size=0.7) + 
-scale_y_continuous(sec.axis = sec_axis(~.*0.4, name="(°C)")) + theme_bw() +
+geom_line(data=climate.temp, aes(x=date, y=temp_tre*4, color="Temperature"), alpha=0.8, size=0.7) + 
+scale_y_continuous(sec.axis = sec_axis(~./4, name="Temperature (°C)")) + theme_bw() +
 scale_color_manual(values=c("Number of NTS cases"="orange2", "Temperature"="green2")) + 
-ggtitle("B") + ylab("Cases") + xlab("Month'Year") + 
+ggtitle("B") + ylab("NTS cases") + xlab("Month'Year") + 
 theme(axis.title.x = element_text(size=10), axis.title.y=element_text(size=10, color="orange2",face="bold"), 
 plot.title = element_text(hjust=0,face="bold")) +
-theme(axis.text.x=element_text(size=8), axis.title.y.right=element_text(color="green2", size=10), 
+theme(axis.text.x=element_text(face="bold", size=8), axis.title.y.right=element_text(color="green2", size=10), 
 axis.text.y=element_text(face="bold", size=10)) + 
 scale_x_date(date_breaks = "24 month", date_labels ="%b'%y") +
-theme(legend.justification=c(0.5,0), legend.position=c(0.6,0.6), legend.text = element_text(size=10), 
-legend.title=element_text(size=0)) + theme(legend.key.height=unit(1,"line")) + theme(legend.key.width=unit(1,"line"))
+theme(legend.position="none")
 
 E3<-ggplot() + 
 geom_line(data=case.typhi, aes(x=date, y=case_count_tre, color="Number of typhoid cases"), stat="identity", size=1.0) + 
 geom_line(data=climate.rain, aes(x=date, y=rain_tre/0.06, color="Rainfall"), alpha=0.8, size=0.7) + 
-scale_y_continuous(sec.axis=sec_axis(~.*0.06, name="(mm)")) + theme_bw() +
+scale_y_continuous(sec.axis=sec_axis(~.*0.06, name="Rainfall (mm)")) + theme_bw() +
 scale_color_manual(values=c("Number of typhoid cases"="red2", "Rainfall"="blue2")) + 
-ggtitle("C") + ylab("Cases") + xlab("Month'Year") + 
+ggtitle("C") + ylab("Typhoid cases") + xlab("Month'Year") + 
 theme(axis.title.x = element_text(size=0), axis.title.y=element_text(size=10, color="red2",face="bold"),
 plot.title=element_text(hjust=0,face="bold")) +
 theme(axis.text.x=element_text(size=0), axis.title.y.right=element_text(color="blue2", size=10),
 axis.text.y = element_text(face="bold", size=10)) + 
 scale_x_date(date_breaks = "24 month", date_labels ="%b'%y") +
-theme(legend.justification=c(0.5,0), legend.position=c(0.35,0.09), legend.text=element_text(size=10), 
-legend.title = element_text(size=0)) + theme(legend.key.height=unit(1,"line")) + theme(legend.key.width=unit(1,"line"))
+theme(legend.position="none")
 
 E4<-ggplot() + 
 geom_line(data=case.typhi, aes(x=date, y=case_count_tre, color="Number of typhoid cases"), stat="identity", size=1.0) + 
-geom_line(data=climate.temp, aes(x=date, y=temp_tre/0.6, color="Temperature"), alpha=0.8, size = 0.7) + 
-scale_y_continuous(sec.axis=sec_axis(~.*0.6, name="(°C)")) + theme_bw() +
+geom_line(data=climate.temp, aes(x=date, y=temp_tre/0.4, color="Temperature"), alpha=0.8, size = 0.7) + 
+scale_y_continuous(sec.axis=sec_axis(~.*0.4, name="Temperature (°C)")) + theme_bw() +
 scale_color_manual(values=c("Number of typhoid cases"="red2", "Temperature"="green2")) + 
-ggtitle("D") + ylab("Cases") + xlab("Month'Year") + 
+ggtitle("D") + ylab("Typhoid cases") + xlab("Month'Year") + 
 theme(axis.title.x=element_text(size=10), axis.title.y=element_text(size=10, color="red2",face="bold"), 
 plot.title=element_text(hjust=0,face="bold")) +
 theme(axis.text.x=element_text(face="bold", size=8), axis.title.y.right = element_text(color="green2", size=10),
 axis.text.y = element_text(face="bold", size=10)) + 
 scale_x_date(date_breaks="24 month", date_labels="%b'%y") +
-theme(legend.justification=c(0.5,0), legend.position=c(0.35,0.09), legend.text=element_text(size=10), 
-legend.title = element_text(size=0)) + theme(legend.key.height=unit(1,"line")) + theme(legend.key.width=unit(1,"line"))
+theme(legend.position="none")
 
 grid.arrange(grobs=list(E1, E3, E2, E4), ncol=2, nrow=2)
 ```
@@ -543,33 +538,21 @@ nts.pred.rain <- crosspred(nts.cb.rain, nts.model, cen=0, by=0.2)
 nts.pred.temp <- crosspred(nts.cb.temp, nts.model, cen=23, by=0.2)
 ```
 
-```{r plotContourNTS, message=FALSE, warning=FALSE, include=FALSE, results="hide"}
-jpeg("nts.pred.rain.png", width=900,height=600)
-plot(nts.pred.rain, "contour", key.title=title("NTS"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7))
-dev.off()
-jpeg("nts.pred.temp.png", width=900,height=600)
-plot(nts.pred.temp, "contour", key.title=title("NTS"), plot.title=title("", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7))
-dev.off()
-plot(load.image("nts.pred.rain.png"), main="B")
-plot(load.image("nts.pred.temp.png"), main="B")
-```
-
 ##### Plots of NTS predictions due to rainfall (Figure 4)
-```{r predictRainNTS, results="hide", message=FALSE, warning=FALSE, fig.align='center', fig.height=8, fig.width=12}
-par(mfrow=c(2,2))
-plot(nts.pred.rain, xlab="Rainfall (mm)", ylab="Lag (month)", zlab="RR of NTS", theta=150, phi=5, lphi=100, cex.lab=1.1, cex.axis=1.1, col="gray80",main="A")
-plot(nts.pred.rain, "slices", xlab="Rainfall (mm) [given lag 2]", lag=c(2), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="B")
-plot(nts.pred.rain, "slices", xlab="lag (month) [given 9 mm] ", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="C")
-plot(nts.pred.rain, "slices", xlab="lag (month) [given 13 mm] ", var=c(13), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="D")
+```{r predictRainNTS, results="hide", message=FALSE, warning=FALSE, fig.align='center', fig.height=5, fig.width=8}
+#plot(nts.pred.rain, xlab="Rainfall (mm)", ylab="Lag (month)", zlab="RR of NTS", theta=150, phi=5, lphi=100, cex.lab=1.1, cex.axis=1.1, col="gray80",main="A")
+plot(nts.pred.rain, "contour", key.title=title("NTS"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7,main="A"))
+plot(nts.pred.rain, "slices", xlab="Lag (month) [given 9 mm] ", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="B")
+plot(nts.pred.rain, "slices", xlab="Lag (month) [given 13 mm] ", var=c(13), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="C")
+
 ```
 
 ##### Plots of NTS predictions due to temperature (Figure 6)
-```{r predictTempNTS, results="hide", message=FALSE, warning=FALSE, fig.align='center', fig.height=8, fig.width=12}
-par(mfrow=c(2,2))
-plot(nts.pred.temp, xlab="Temperature (°C)", ylab="Lag (month)", zlab="RR of NTS", theta=150, phi=5, lphi=100, cex.lab=1, cex.axis=1, col="gray80",main="A")
-plot(nts.pred.temp, xlab="Temperature (°C) [given lag 3]", "slices",lag=c(3), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="B")
-plot(nts.pred.temp, xlab="Lag (month) [given 19 °C]", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="C")
-plot(nts.pred.temp, xlab="Lag (month) [given 29 °C]", "slices",var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="D")
+```{r predictTempNTS, results="hide", message=FALSE, warning=FALSE, fig.align='center', fig.height=5, fig.width=8}
+#plot(nts.pred.temp, xlab="Temperature (°C)", ylab="Lag (month)", zlab="RR of NTS", theta=150, phi=5, lphi=100, cex.lab=1, cex.axis=1, col="gray80",main="A")
+plot(nts.pred.temp, "contour", key.title=title("NTS"), plot.title=title("", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7,main="A"))
+plot(nts.pred.temp, xlab="Lag (month) [given 19 °C]", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="B")
+plot(nts.pred.temp, xlab="Lag (month) [given 29 °C]", "slices",var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="C")
 ```
 
 ##### Reformulate cross-basis matrix using selected best Typhoid models
@@ -609,58 +592,44 @@ typ.pred.rain <- crosspred(typ.cb.rain1, typ.modelR, cen=0, by=0.2)
 typ.pred.temp <- crosspred(typ.cb.temp, typ.modelT, cen=23, by=0.2)
 ```
 
-```{r plotContourTYP, message=FALSE, warning=FALSE, include=FALSE, results="hide"}
-jpeg("typ.pred.rain.png", width=900,height=600)
-plot(typ.pred.rain, "contour", key.title=title("TYP"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7))
-dev.off()
-jpeg("typ.pred.temp.png", width=900,height=600)
-plot(typ.pred.temp, "contour", key.title=title("TYP"), plot.title=title("", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7))
-dev.off()
-plot(load.image("typ.pred.rain.png"), main="B")
-plot(load.image("typ.pred.temp.png"), main="B")
-```
-
 ##### Plots of TYP predictions due to rainfall (Figure 5)
-```{r predictRainTYP, results="hide", message=FALSE, warning=FALSE, fig.align='center', fig.height=8, fig.width=12}
-par(mfrow=c(2,2))
-plot(typ.pred.rain, xlab="Rainfall (mm)", ylab="Lag (month)", zlab="RR of typhoid", theta=210, phi=10, lphi=150, col="gray80", main="A", cex.lab=1.1, cex.axis=1.1)
-plot(typ.pred.rain, xlab="Rainfall (mm) [given lag 4]", "slices", lag=c(4), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.1, cex.axis=1.1,main="B")
-plot(typ.pred.rain, xlab="Lag (month) [given 9 mm]", "slices", var=c(9), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.1, cex.axis=1.1,main="C")
-plot(typ.pred.rain, xlab="Lag (month) [given 16 mm]", "slices", var=c(16), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.1, cex.axis=1.1,main="D")
+```{r predictRainTYP, results="hide", message=FALSE, warning=FALSE, fig.align='center', fig.height=5, fig.width=8}
+#plot(typ.pred.rain, xlab="Rainfall (mm)", ylab="Lag (month)", zlab="RR of typhoid", theta=210, phi=10, lphi=150, col="gray80", main="D", cex.lab=1.1, cex.axis=1.1)
+plot(typ.pred.rain, "contour", key.title=title("TYP"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7,main="D"))
+plot(typ.pred.rain, xlab="Lag (month) [given 9 mm]", "slices", var=c(9), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.5, cex.axis=1.5,main="E")
+plot(typ.pred.rain, xlab="Lag (month) [given 16 mm]", "slices", var=c(16), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.5, cex.axis=1.5,main="F")
 ```
 
 ##### Plots of TYP predictions due to temperature (Figure 7)
-```{r predictTempTYP, results="hide", message=FALSE, warning=FALSE, fig.align='center', fig.height=8, fig.width=12}
-par(mfrow=c(2,3))
-plot(typ.pred.temp, xlab="Temperature (°C)", ylab="Lag (month)", zlab="RR of typhoid", theta=150, phi=5, lphi=100, col="gray80", main="A", cex.lab=1.1, cex.axis=1.1)
-plot(typ.pred.temp, xlab="Temperature (°C) [given lag 2]", "slices", lag=c(2), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.1, cex.axis=1.1,main="B")
-plot(typ.pred.temp, xlab="Temperature (°C) [given lag 5]", "slices", lag=c(5), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.1, cex.axis=1.1,main="C")
-plot(typ.pred.temp, xlab="Lag (month) [given 19 °C]", "slices", var=c(19), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.1, cex.axis=1.1,main="D")
-plot(typ.pred.temp, xlab="Lag (month) [given 25 °C]", "slices", var=c(25), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.1, cex.axis=1.1,main="E")
+```{r predictTempTYP, results="hide", message=FALSE, warning=FALSE, fig.align='center', fig.height=5, fig.width=8}
+#plot(typ.pred.temp, xlab="Temperature (°C)", ylab="Lag (month)", zlab="RR of typhoid", theta=150, phi=5, lphi=100, col="gray80", main="D", cex.lab=1.1, cex.axis=1.1)
+plot(typ.pred.temp, "contour", key.title=title("TYP"), plot.title=title("", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7,main="D"))
+plot(typ.pred.temp, xlab="Lag (month) [given 19 °C]", "slices", var=c(19), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.5, cex.axis=1.5,main="E")
+plot(typ.pred.temp, xlab="Lag (month) [given 25 °C]", "slices", var=c(25), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.5, cex.axis=1.5,main="F")
 ```
 
 ##### Plots of validation checks (Supplementary Figure S4)
-```{r validationCheck, results="hide", message=FALSE, warning=FALSE, fig.width=12, fig.height=8, fig.align='center'}
+```{r validationCheck, results="hide", message=FALSE, warning=FALSE, fig.width=11, fig.height=8, fig.align='center'}
 par(mfrow=c(3,4))
 plot(mo.dlnmN$date, residuals(nts.model,type="deviance"), pch=19, cex=0.8, col=grey(0.4),main="A", ylab="Residuals",xlab="",cex.lab=1.2,cex.axis=1.2) 
 abline(h=0,lty=2,lwd=3)
 pacf(residuals(nts.model,type="deviance"),na.action=na.omit,main="B",xlim=c(0,8),xlab="", cex.lab=1.2,cex.axis=1.2)
 acf(residuals(nts.model,type="deviance"),na.action=na.omit,main="C",xlim=c(0,8),xlab="", cex.lab=1.2,cex.axis=1.2)
-plot(matrix(mo.dlnmN$incid_seaX),matrix(predict(nts.model, type="response")), col=c("orange2","gray2"),xlab="Predicted NTS incidence", ylab="Observed NTS incidence",pch=19,cex=0.8,cex.lab=1.2,cex.axis=1.2)
+plot(matrix(mo.dlnmN$incid_seaX),matrix(predict(nts.model, type="response")), col=c("orange2","gray2"),main="D",xlab="Predicted NTS incidence", ylab="Observed NTS incidence",pch=19,cex=0.8,cex.lab=1.2,cex.axis=1.2)
 legend("topleft", legend=c("observed", "predicted"), col=c("grey30", "orange2"), cex=0.8, pch=19)
 
 plot(mo.dlnmT$date, residuals(typ.modelR,type="deviance"), pch=19, cex=0.8, col=grey(0.6),main="E", ylab="Residuals",xlab="",cex.lab=1.2,cex.axis=1.2)
 abline(h=0,lty=2,lwd=3)
 pacf(residuals(typ.modelR,type="deviance"),na.action=na.omit,main="F",xlim=c(0,8),xlab="",cex.lab=1.2, cex.axis=1.2)
 acf(residuals(typ.modelR,type="deviance"),na.action=na.omit,main="G",xlim=c(0,8),xlab="",cex.lab=1.2, cex.axis=1.2)
-plot(matrix(mo.dlnmT$incid_seaX),matrix(predict(typ.modelR, type="response")), col=c("red2","gray2"),xlab="Predicted typhoid incidence", ylab="Observed typhoid incidence",pch=19,cex=0.8,cex.lab=1.2,cex.axis=1.2)
+plot(matrix(mo.dlnmT$incid_seaX),matrix(predict(typ.modelR, type="response")), col=c("red2","gray2"),main="H",xlab="Predicted typhoid incidence", ylab="Observed typhoid incidence",pch=19,cex=0.8,cex.lab=1.2,cex.axis=1.2)
 legend("topleft", legend=c("observed", "predicted"), col=c("grey30", "red2"), cex=0.8, pch=19)
 
 plot(mo.dlnmT$date, residuals(typ.modelT,type="deviance"), pch=19, cex=0.8, col=grey(0.6),main="I", ylab="Residuals", xlab="Year",cex.lab=1.2,cex.axis=1.2) 
 abline(h=0,lty=2,lwd=3)
 pacf(residuals(typ.modelT,type="deviance"),na.action=na.omit,main="J",xlim=c(0,8),xlab="Lag (month)",cex.lab=1.2, cex.axis=1.2)
 acf(residuals(typ.modelT,type="deviance"),na.action=na.omit,main="K",xlim=c(0,8),xlab="Lag (month)",cex.lab=1.2, cex.axis=1.2)
-plot(matrix(mo.dlnmT$incid_seaX),matrix(predict(typ.modelT, type="response")), col=c("red2","gray2"),xlab="Predicted typhoid incidence", ylab="Observed typhoid incidence",pch=19,cex=0.8,cex.lab=1.2,cex.axis=1.2)
+plot(matrix(mo.dlnmT$incid_seaX),matrix(predict(typ.modelT, type="response")), col=c("red2","gray2"),main="L",xlab="Predicted typhoid incidence", ylab="Observed typhoid incidence",pch=19,cex=0.8,cex.lab=1.2,cex.axis=1.2)
 legend("topleft", legend=c("observed", "predicted"), col=c("grey30", "red2"), cex=0.8, pch=19)
 ```
 
@@ -840,4 +809,14 @@ plot(typ.pred.temp.s4,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colo
 plot(typ.pred.temp.s5,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="J")
 plot(typ.pred.temp.s6,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="L")
 ```
+
+##### Descriptive stats of the study population
+```{r DescrptiveStats, fig.align='center', message=FALSE, warning=FALSE}
+mean(mo.dlnmN$incid_seaX) 
+ci(mo.dlnmN$incid_seaX)
+mean(mo.dlnmT$incid_seaX)
+ci(mo.dlnmT$incid_seaX)
+```
+
+
 
