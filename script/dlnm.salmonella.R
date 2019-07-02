@@ -103,7 +103,7 @@ climate.rain <-tk_tbl(climate.rain, preserve_index = TRUE, rename_index = "date"
 climate.temp <-tk_tbl(climate.temp, preserve_index = TRUE, rename_index = "date") 
 
 #seasonally-adjusted cases and climate
-case.iNTS.ts <- ts(na.omit(case.iNTS$case_count), frequency=12)
+case.iNTS.ts <- ts(na.omit(case.iNTS$case_count), frequency = 12)
 trend_n <-tk_tbl(exp(seasadj(mstl(log(case.iNTS.ts)))), preserve_index = FALSE) #multiplicative series (log-transform); already has at least 1 NTS case.
 case.iNTS$case_count_sea <- trend_n$value  #seasonally-adjusted cases: trend+remainder
 case.iNTS$case_count_sea[case.iNTS$case_count_sea < 0] <- 0
@@ -111,7 +111,7 @@ setnames(case.iNTS, old="case_count", new="case_count_obs")
 trend_n <- tk_tbl(exp(mstl(log(case.iNTS.ts))))
 case.iNTS$case_count_tre <- trend_n$Trend #trend of cases: trend-only
 
-case.typhi.ts <- ts(na.omit(case.typhi$case_count), frequency=12)
+case.typhi.ts <- ts(na.omit(case.typhi$case_count), frequency = 12)
 trend_n <-tk_tbl(exp(seasadj(mstl(log(case.typhi.ts+1)))), preserve_index = FALSE) #multiplicative series (log-transform); add 1 since log(0) is not defined.
 case.typhi$case_count_sea <- trend_n$value #seasonally-adjusted cases: trend+remainder
 case.typhi$case_count_sea[case.typhi$case_count_sea < 0] <- 0
@@ -119,16 +119,16 @@ setnames(case.typhi, old="case_count", new="case_count_obs")
 trend_n <- tk_tbl(exp(mstl(log(case.typhi.ts+1))))
 case.typhi$case_count_tre <- trend_n$Trend #trend of cases: trend-only
 
-climate.rain.ts <- ts(na.omit(climate.rain$rainfall), frequency=12)
-trend_n <-tk_tbl(seasadj(mstl(climate.rain.ts,s.window='periodic')), preserve_index = FALSE) #additive series
+climate.rain.ts <- ts(na.omit(climate.rain$rainfall), frequency = 12)
+trend_n <-tk_tbl(seasadj(mstl(climate.rain.ts)), preserve_index = FALSE) #additive series
 climate.rain$rainfall_sea <- trend_n$value #seasonally-adjusted rainfall: trend+remainder
 climate.rain$rainfall_sea[climate.rain$rainfall_sea < 0] <- 0
 setnames(climate.rain, old="rainfall", new="rainfall_obs")
 trend_n <- tk_tbl(mstl(climate.rain.ts))
 climate.rain$rain_tre <- trend_n$Trend #trend of cases: trend-only
 
-climate.temp.ts <- ts(na.omit(climate.temp$temperature), frequency=12)
-trend_n <-tk_tbl(seasadj(mstl(climate.temp.ts,s.window='periodic')), preserve_index = FALSE) #additive series
+climate.temp.ts <- ts(na.omit(climate.temp$temperature), frequency = 12)
+trend_n <-tk_tbl(seasadj(mstl(climate.temp.ts)), preserve_index = FALSE) #additive series
 climate.temp$temperature_sea <- trend_n$value #seasonally-adjusted temperature: trend+remainder
 climate.temp$temperature_sea[climate.temp$temperature_sea < 0] <- 0
 setnames(climate.temp, old="temperature", new="temperature_obs")
@@ -136,18 +136,31 @@ trend_n <- tk_tbl(mstl(climate.temp.ts))
 climate.temp$temp_tre <- trend_n$Trend #trend of cases: trend-only
 
 #plot decomposed all series
+<<<<<<< HEAD
 x<-mstl(case.iNTS.ts,s.window="period") %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE) + theme_bw()
 y<-mstl(case.typhi.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE) + theme_bw()
 z<-mstl(climate.rain.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE) + theme_bw()
 v<-mstl(climate.temp.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE) + theme_bw()
+=======
+x<-case.iNTS.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE) + theme_bw()
+y<-case.typhi.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE) + theme_bw()
+z<-climate.rain.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE) + theme_bw()
+v<-climate.temp.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE) + theme_bw()
+>>>>>>> 2a0cbe69678e5d07f31a210999b55aeabff04106
 grid.arrange(grobs=list(x,y,z,v), ncol=4, nrow=1)
 
 #plot all seasonally-adjusted series
 S1<-ggplot(as.data.frame(case.iNTS)) + 
   geom_line(aes(date, case_count_obs, color="Original"), size=0.8) + 
+<<<<<<< HEAD
   geom_line(aes(date, case_count_sea, color="Seasonal-adjusted"), size=0.8) + 
   scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="orange2")) +
   labs(title="A", x ="", y = "iNTS cases") + 
+=======
+  geom_line(aes(date, case_count_sea, color="Seasonally-adjusted"), size=0.8) + 
+  scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="orange2")) +
+  labs(title="A", x ="", y = "NTS cases") + 
+>>>>>>> 2a0cbe69678e5d07f31a210999b55aeabff04106
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
   theme(axis.title.y = element_text(size = 10)) +
@@ -158,8 +171,8 @@ S1<-ggplot(as.data.frame(case.iNTS)) +
 
 S2<-ggplot(as.data.frame(case.typhi)) + 
   geom_line(aes(date, case_count_obs, color="Original"), size=0.8) + 
-  geom_line(aes(date, case_count_sea, color="Seasonal-adjusted"), size=0.8) + 
-  scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="red2")) +
+  geom_line(aes(date, case_count_sea, color="Seasonally-adjusted"), size=0.8) + 
+  scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="red2")) +
   labs(title="B", x ="", y = "Typhoid cases") + 
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
@@ -171,8 +184,8 @@ S2<-ggplot(as.data.frame(case.typhi)) +
 
 S3<-ggplot(as.data.frame(climate.rain)) + 
   geom_line(aes(date, rainfall_obs, color="Original"), size=0.8) + 
-  geom_line(aes(date, rainfall_sea, color="Seasonal-adjusted"), size=0.8) + 
-  scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="blue2")) +
+  geom_line(aes(date, rainfall_sea, color="Seasonally-adjusted"), size=0.8) + 
+  scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="blue2")) +
   labs(title="C", x ="Year", y = "Rainfall (mm)") + 
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
@@ -184,8 +197,8 @@ S3<-ggplot(as.data.frame(climate.rain)) +
 
 S4<-ggplot(as.data.frame(climate.temp)) + 
   geom_line(aes(date, temperature_obs, color="Original"), size=0.8) + 
-  geom_line(aes(date, temperature_sea, color="Seasonal-adjusted"), size=0.8) + 
-  scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="green2")) + 
+  geom_line(aes(date, temperature_sea, color="Seasonally-adjusted"), size=0.8) + 
+  scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="green2")) + 
   labs(title="D", x ="Year", y = "Temperature (°C)") + 
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
@@ -195,7 +208,7 @@ S4<-ggplot(as.data.frame(climate.temp)) +
   theme(legend.key.height=unit(1,"line")) + 
   theme(legend.key.width=unit(1,"line"))
 
-grid.arrange(grobs=list(S1, S2), ncol=2, nrow=1)
+grid.arrange(grobs=list(S1, S2, S3, S4), ncol=2, nrow=2)
 rm(list = ls()[grep("^trend_n", ls())])
 
 #linear interpolation and extrapolation
@@ -386,12 +399,13 @@ agesex.p2<- ggplot(subset(case, organism=="typhi" & !is.na(age) & sex != "Unknow
 grid.arrange(grobs=list(agesex.p1, agesex.p2), ncol=2, nrow=1)
 
 #contour plots of seasonal dynamics for evey year. repeat for obs v sea.adjusted cases.
-case.iNTS.spi <- subset(case.iNTS, year(case.iNTS$date)<2011, select=c(date,incid_obs)) 
+case.iNTS.spi <- subset(case.iNTS, year(case.iNTS$date)<2011, select=c(date,incid_sea)) 
 case.iNTS.spi$month <- month(case.iNTS.spi$date)
 case.iNTS.spi$year <- year(case.iNTS.spi$date)
 case.iNTS.spi$date <- NULL
-case.iNTS.spi <- spread(case.iNTS.spi, year, incid_obs)
+case.iNTS.spi <- spread(case.iNTS.spi, year, incid_sea)
 case.iNTS.spi <- as.matrix(case.iNTS.spi)[,-1]
+<<<<<<< HEAD
 <<<<<<< HEAD
 plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.iNTS.spi, type = "contour", colorscale = 'heatmap', contours = list(showlabels = TRUE)) %>% 
 colorbar(title = "iNTS incidence per \n 100,000 population") %>%
@@ -401,13 +415,19 @@ plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y = c("Ja
 colorbar(title = "NTS incidence per \n 100,000 population") %>%
 layout(title="A", xaxis=list(title ="Year"), yaxis=list(title="Month"), font=list(size = 13))
 >>>>>>> db71641c0ecc7088704ac8e6b28b649a15846906
+=======
+YMD1<-plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.iNTS.spi, type = "contour", colorscale = 'jet', contours = list(showlabels = TRUE)) %>% 
+colorbar(title = "NTS incidence per \n 100,000 population") %>%
+layout(title="A", xaxis=list(title ="Year"), yaxis=list(title="Month"), font=list(size = 13))
+YMD1
+>>>>>>> 2a0cbe69678e5d07f31a210999b55aeabff04106
 write.csv2(case.iNTS.spi, file = "case.iNTS.spi.csv")
 
-case.typhi.spi <- subset(case.typhi, year(case.typhi$date)>2010, select=c(date,incid_obs)) 
+case.typhi.spi <- subset(case.typhi, year(case.typhi$date)>2010, select=c(date,incid_sea)) 
 case.typhi.spi$month <- month(case.typhi.spi$date)
 case.typhi.spi$year <- year(case.typhi.spi$date)
 case.typhi.spi$date <- NULL
-case.typhi.spi <- spread(case.typhi.spi, year, incid_obs)
+case.typhi.spi <- spread(case.typhi.spi, year, incid_sea)
 case.typhi.spi <- as.matrix(case.typhi.spi)[,-1]
 plot_ly(x = c(2011,2012,2013,2014,2015), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.typhi.spi, type = "contour", colorscale = 'heatmap', contours = list(showlabels = TRUE)) %>% 
 colorbar(title = "Typhoid incidence per \n 100,000 population") %>%
@@ -477,7 +497,6 @@ mo.dlnmT$time <- seq.int(from = 1, to=60, by=1)
 mo.dlnmT$year <- year(mo.dlnmT$date)
 mo.dlnmT$month <- month(mo.dlnmT$date)
 mo.dlnmT$incid_seaX<-round(mo.dlnmT$incid_sea, digits = 0)
-mo.dlnmT$incid_obsX<-round(mo.dlnmT$incid_obs, digits = 0)
 
 #change AIC to QAIC for model comparisons
 nts.quasipoisson <- function(...) { 
@@ -530,13 +549,13 @@ for(k in 3:5){
 #construct cross-basis
 sort(mo.dlnmN$rainfall_obs, decreasing=FALSE)
 varknots=equalknots(mo.dlnmN$rainfall_obs, fun="ns", df=3)
-lagknots <- logknots(8, fun="ns", df=3)
+lagknots <- logknots(8, fun="ns", df=4)
 mo.cb.rain.iNTS <- crossbasis(mo.dlnmN$rainfall_obs, lag =8, argvar = list(knots=varknots), arglag = list(knots=lagknots))
 summary(mo.cb.rain.iNTS)
 
 sort(mo.dlnmN$temperature_obs, decreasing=FALSE)
 varknots=equalknots(mo.dlnmN$temperature_obs, fun="ns", df=3)
-lagknots <- logknots(8, fun="ns", df=3)
+lagknots <- logknots(8, fun="ns", df=4)
 mo.cb.temp.iNTS <- crossbasis(mo.dlnmN$temperature_obs, lag=8, argvar=list(knots=varknots), arglag=list(knots=lagknots))
 summary(mo.cb.temp.iNTS)
 
@@ -555,6 +574,7 @@ mo.pred.temp.iNTS <- crosspred(mo.cb.temp.iNTS, mo.model.iNTS, cen = 23, by=0.2)
 
 #3D, countour, curve plots for rainfall
 dev.off()
+<<<<<<< HEAD
 <<<<<<< HEAD
 par(mar=c(5,5,2,2)+0.1)
 plot(mo.pred.rain.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.5, cex.axis=1.5,main="A"))
@@ -578,6 +598,19 @@ plot(mo.pred.temp.iNTS, "contour", key.title=title("NTS"), plot.title=title("", 
 plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 19 °C]", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="B")
 plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 29 °C]", "slices",var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="C")
 >>>>>>> db71641c0ecc7088704ac8e6b28b649a15846906
+=======
+plot(mo.pred.rain.iNTS, xlab="Rainfall (mm)", ylab="Lag (month)", zlab="RR of NTS", theta=150, phi=5, lphi=100, cex.lab=1.1, cex.axis=1.1, col="gray80",main="A")
+plot(mo.pred.rain.iNTS, "contour", key.title=title("NTS"), plot.title=title("B", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.1, cex.axis=1.1))
+plot(mo.pred.rain.iNTS, "slices", xlab="Rainfall (mm)", lag=c(2), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="C")
+plot(mo.pred.rain.iNTS, "slices", xlab="Lag (month)", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="D")
+
+#3D, countour, curve plots for temperature
+dev.off()
+plot(mo.pred.temp.iNTS, xlab="Temperature (°C)", ylab="Lag (month)", zlab="RR of NTS", theta=150, phi=5, lphi=100, cex.lab=1, cex.axis=1, col="gray80",main="A")
+plot(mo.pred.temp.iNTS, "contour", key.title=title("NTS"), plot.title=title("B", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1, cex.axis=1))
+plot(mo.pred.temp.iNTS, xlab="Temperature (°C)", "slices",lag=c(3), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="C")
+plot(mo.pred.temp.iNTS, xlab="Lag (month)", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="D")
+>>>>>>> 2a0cbe69678e5d07f31a210999b55aeabff04106
 
 #========CROSS-BASIS MODEL SELECTION WITH TYPHOID FEVER OUTCOME========
 
