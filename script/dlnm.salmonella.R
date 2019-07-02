@@ -386,22 +386,28 @@ agesex.p2<- ggplot(subset(case, organism=="typhi" & !is.na(age) & sex != "Unknow
 grid.arrange(grobs=list(agesex.p1, agesex.p2), ncol=2, nrow=1)
 
 #contour plots of seasonal dynamics for evey year. repeat for obs v sea.adjusted cases.
-case.iNTS.spi <- subset(case.iNTS, year(case.iNTS$date)<2011, select=c(date,incid_sea)) 
+case.iNTS.spi <- subset(case.iNTS, year(case.iNTS$date)<2011, select=c(date,incid_obs)) 
 case.iNTS.spi$month <- month(case.iNTS.spi$date)
 case.iNTS.spi$year <- year(case.iNTS.spi$date)
 case.iNTS.spi$date <- NULL
-case.iNTS.spi <- spread(case.iNTS.spi, year, incid_sea)
+case.iNTS.spi <- spread(case.iNTS.spi, year, incid_obs)
 case.iNTS.spi <- as.matrix(case.iNTS.spi)[,-1]
+<<<<<<< HEAD
 plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.iNTS.spi, type = "contour", colorscale = 'heatmap', contours = list(showlabels = TRUE)) %>% 
 colorbar(title = "iNTS incidence per \n 100,000 population") %>%
 layout(title="<b>A</b>", xaxis=list(title ="Year",color="black"), yaxis=list(title="Month",color="black"), font=list(size = 13))
+=======
+plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.iNTS.spi, type = "contour", colorscale = 'jet', contours = list(showlabels = TRUE)) %>% 
+colorbar(title = "NTS incidence per \n 100,000 population") %>%
+layout(title="A", xaxis=list(title ="Year"), yaxis=list(title="Month"), font=list(size = 13))
+>>>>>>> db71641c0ecc7088704ac8e6b28b649a15846906
 write.csv2(case.iNTS.spi, file = "case.iNTS.spi.csv")
 
-case.typhi.spi <- subset(case.typhi, year(case.typhi$date)>2010, select=c(date,incid_sea)) 
+case.typhi.spi <- subset(case.typhi, year(case.typhi$date)>2010, select=c(date,incid_obs)) 
 case.typhi.spi$month <- month(case.typhi.spi$date)
 case.typhi.spi$year <- year(case.typhi.spi$date)
 case.typhi.spi$date <- NULL
-case.typhi.spi <- spread(case.typhi.spi, year, incid_sea)
+case.typhi.spi <- spread(case.typhi.spi, year, incid_obs)
 case.typhi.spi <- as.matrix(case.typhi.spi)[,-1]
 plot_ly(x = c(2011,2012,2013,2014,2015), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.typhi.spi, type = "contour", colorscale = 'heatmap', contours = list(showlabels = TRUE)) %>% 
 colorbar(title = "Typhoid incidence per \n 100,000 population") %>%
@@ -549,6 +555,7 @@ mo.pred.temp.iNTS <- crosspred(mo.cb.temp.iNTS, mo.model.iNTS, cen = 23, by=0.2)
 
 #3D, countour, curve plots for rainfall
 dev.off()
+<<<<<<< HEAD
 par(mar=c(5,5,2,2)+0.1)
 plot(mo.pred.rain.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.5, cex.axis=1.5,main="A"))
 plot(mo.pred.rain.iNTS, "slices", xlab="Lag (month) [given 9 mm] ", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of iNTS", cex.lab=1.5, cex.axis=1.5,main="B")
@@ -560,6 +567,17 @@ par(mar=c(5,5,2,2)+1)
 plot(mo.pred.temp.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1.5, cex.axis=1.5,main="A"))
 plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 19 °C]", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of iNTS", cex.lab=1.5, cex.axis=1.5,main="B")
 plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 29 °C]", "slices",var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of iNTS", cex.lab=1.5, cex.axis=1.5,main="C")
+=======
+plot(mo.pred.rain.iNTS, "contour", key.title=title("NTS"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7,main="A"))
+plot(mo.pred.rain.iNTS, "slices", xlab="Lag (month) [given 9 mm] ", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="B")
+plot(mo.pred.rain.iNTS, "slices", xlab="Lag (month) [given 13 mm] ", var=c(13), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="C")
+
+#3D, countour, curve plots for temperature
+dev.off()
+plot(mo.pred.temp.iNTS, "contour", key.title=title("NTS"), plot.title=title("", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7,main="A"))
+plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 19 °C]", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="B")
+plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 29 °C]", "slices",var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="C")
+>>>>>>> db71641c0ecc7088704ac8e6b28b649a15846906
 
 #========CROSS-BASIS MODEL SELECTION WITH TYPHOID FEVER OUTCOME========
 
