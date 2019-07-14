@@ -136,31 +136,21 @@ trend_n <- tk_tbl(mstl(climate.temp.ts))
 climate.temp$temp_tre <- trend_n$Trend #trend of cases: trend-only
 
 #plot decomposed all series
-<<<<<<< HEAD
 x<-mstl(case.iNTS.ts,s.window="period") %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE) + theme_bw()
 y<-mstl(case.typhi.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE) + theme_bw()
 z<-mstl(climate.rain.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE) + theme_bw()
 v<-mstl(climate.temp.ts,s.window="periodic") %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE) + theme_bw()
-=======
-x<-case.iNTS.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="A",xlab="Years (2000-2015)",size=1,colour="orange2",is.date=FALSE) + theme_bw()
-y<-case.typhi.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="B",xlab="Years (2000-2015)",size=1,colour="red2",is.date=FALSE) + theme_bw()
-z<-climate.rain.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="C",xlab="Years (2000-2015)",size=1,colour="blue2",is.date=FALSE) + theme_bw()
-v<-climate.temp.ts %>% mstl() %>% ggfortify:::autoplot.ts(main="D",xlab="Years (2000-2015)",size=1,colour="green2",is.date=FALSE) + theme_bw()
->>>>>>> 2a0cbe69678e5d07f31a210999b55aeabff04106
 grid.arrange(grobs=list(x,y,z,v), ncol=4, nrow=1)
 
 #plot all seasonally-adjusted series
 S1<-ggplot(as.data.frame(case.iNTS)) + 
   geom_line(aes(date, case_count_obs, color="Original"), size=0.8) + 
-<<<<<<< HEAD
   geom_line(aes(date, case_count_sea, color="Seasonal-adjusted"), size=0.8) + 
   scale_color_manual(values = c("Original"="black","Seasonal-adjusted"="orange2")) +
   labs(title="A", x ="", y = "iNTS cases") + 
-=======
   geom_line(aes(date, case_count_sea, color="Seasonally-adjusted"), size=0.8) + 
   scale_color_manual(values = c("Original"="black","Seasonally-adjusted"="orange2")) +
   labs(title="A", x ="", y = "NTS cases") + 
->>>>>>> 2a0cbe69678e5d07f31a210999b55aeabff04106
   theme(plot.title = element_text(hjust = 0)) + 
   theme(axis.title.x = element_text(size = 10)) + 
   theme(axis.title.y = element_text(size = 10)) +
@@ -405,22 +395,9 @@ case.iNTS.spi$year <- year(case.iNTS.spi$date)
 case.iNTS.spi$date <- NULL
 case.iNTS.spi <- spread(case.iNTS.spi, year, incid_sea)
 case.iNTS.spi <- as.matrix(case.iNTS.spi)[,-1]
-<<<<<<< HEAD
-<<<<<<< HEAD
 plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.iNTS.spi, type = "contour", colorscale = 'heatmap', contours = list(showlabels = TRUE)) %>% 
 colorbar(title = "iNTS incidence per \n 100,000 population") %>%
 layout(title="<b>A</b>", xaxis=list(title ="Year",color="black"), yaxis=list(title="Month",color="black"), font=list(size = 13))
-=======
-plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.iNTS.spi, type = "contour", colorscale = 'jet', contours = list(showlabels = TRUE)) %>% 
-colorbar(title = "NTS incidence per \n 100,000 population") %>%
-layout(title="A", xaxis=list(title ="Year"), yaxis=list(title="Month"), font=list(size = 13))
->>>>>>> db71641c0ecc7088704ac8e6b28b649a15846906
-=======
-YMD1<-plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y = c("Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"), z = ~case.iNTS.spi, type = "contour", colorscale = 'jet', contours = list(showlabels = TRUE)) %>% 
-colorbar(title = "NTS incidence per \n 100,000 population") %>%
-layout(title="A", xaxis=list(title ="Year"), yaxis=list(title="Month"), font=list(size = 13))
-YMD1
->>>>>>> 2a0cbe69678e5d07f31a210999b55aeabff04106
 write.csv2(case.iNTS.spi, file = "case.iNTS.spi.csv")
 
 case.typhi.spi <- subset(case.typhi, year(case.typhi$date)>2010, select=c(date,incid_sea)) 
@@ -574,8 +551,6 @@ mo.pred.temp.iNTS <- crosspred(mo.cb.temp.iNTS, mo.model.iNTS, cen = 23, by=0.2)
 
 #3D, countour, curve plots for rainfall
 dev.off()
-<<<<<<< HEAD
-<<<<<<< HEAD
 par(mar=c(5,5,2,2)+0.1)
 plot(mo.pred.rain.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.5, cex.axis=1.5,main="A"))
 plot(mo.pred.rain.iNTS, "slices", xlab="Lag (month) [given 9 mm] ", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of iNTS", cex.lab=1.5, cex.axis=1.5,main="B")
@@ -587,30 +562,6 @@ par(mar=c(5,5,2,2)+1)
 plot(mo.pred.temp.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1.5, cex.axis=1.5,main="A"))
 plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 19 °C]", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of iNTS", cex.lab=1.5, cex.axis=1.5,main="B")
 plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 29 °C]", "slices",var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of iNTS", cex.lab=1.5, cex.axis=1.5,main="C")
-=======
-plot(mo.pred.rain.iNTS, "contour", key.title=title("NTS"), plot.title=title("", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7,main="A"))
-plot(mo.pred.rain.iNTS, "slices", xlab="Lag (month) [given 9 mm] ", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="B")
-plot(mo.pred.rain.iNTS, "slices", xlab="Lag (month) [given 13 mm] ", var=c(13), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="C")
-
-#3D, countour, curve plots for temperature
-dev.off()
-plot(mo.pred.temp.iNTS, "contour", key.title=title("NTS"), plot.title=title("", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1.7, cex.axis=1.7,main="A"))
-plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 19 °C]", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="B")
-plot(mo.pred.temp.iNTS, xlab="Lag (month) [given 29 °C]", "slices",var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.5, cex.axis=1.5,main="C")
->>>>>>> db71641c0ecc7088704ac8e6b28b649a15846906
-=======
-plot(mo.pred.rain.iNTS, xlab="Rainfall (mm)", ylab="Lag (month)", zlab="RR of NTS", theta=150, phi=5, lphi=100, cex.lab=1.1, cex.axis=1.1, col="gray80",main="A")
-plot(mo.pred.rain.iNTS, "contour", key.title=title("NTS"), plot.title=title("B", xlab ="Rainfall (mm)", ylab = "Lag (month)", cex.lab=1.1, cex.axis=1.1))
-plot(mo.pred.rain.iNTS, "slices", xlab="Rainfall (mm)", lag=c(2), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="C")
-plot(mo.pred.rain.iNTS, "slices", xlab="Lag (month)", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="D")
-
-#3D, countour, curve plots for temperature
-dev.off()
-plot(mo.pred.temp.iNTS, xlab="Temperature (°C)", ylab="Lag (month)", zlab="RR of NTS", theta=150, phi=5, lphi=100, cex.lab=1, cex.axis=1, col="gray80",main="A")
-plot(mo.pred.temp.iNTS, "contour", key.title=title("NTS"), plot.title=title("B", xlab ="Temperature (°C)", ylab = "Lag (month)", cex.lab=1, cex.axis=1))
-plot(mo.pred.temp.iNTS, xlab="Temperature (°C)", "slices",lag=c(3), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="C")
-plot(mo.pred.temp.iNTS, xlab="Lag (month)", "slices",var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of NTS", cex.lab=1.1, cex.axis=1.1,main="D")
->>>>>>> 2a0cbe69678e5d07f31a210999b55aeabff04106
 
 #========CROSS-BASIS MODEL SELECTION WITH TYPHOID FEVER OUTCOME========
 
