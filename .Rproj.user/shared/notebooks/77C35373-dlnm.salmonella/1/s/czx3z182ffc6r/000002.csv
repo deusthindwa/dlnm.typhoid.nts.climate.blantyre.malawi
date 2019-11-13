@@ -1,3 +1,0 @@
-"0","blantyre1.map <- malawi.map@data$OBJECTID >289 & malawi.map@data$OBJECTID <297 "
-"0","blantyre2.map <- malawi.map@data$OBJECTID >308 & malawi.map@data$OBJECTID <311"
-"0","blantyre3.map <- malawi.map@data$OBJECTID >342"

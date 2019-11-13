@@ -1,2 +1,0 @@
-"0","jpeg(""typ.pred.rain.png"", width=900,height=600)"
-"0","plot(typ.pred.rain, ""contour"", key.title=title(""TYP""), plot.title=title("""", xlab =""Rainfall (mm)"", ylab = ""Lag (month)"", cex.lab=1.7, cex.axis=1.7))"

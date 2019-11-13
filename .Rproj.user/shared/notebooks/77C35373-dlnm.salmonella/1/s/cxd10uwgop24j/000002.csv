@@ -1,2 +1,0 @@
-"0","nts.pred.rain <- crosspred(nts.cb.rain, nts.model, cen=0, by=0.2)"
-"0","nts.pred.temp <- crosspred(nts.cb.temp, nts.model, cen=23, by=0.2)"
