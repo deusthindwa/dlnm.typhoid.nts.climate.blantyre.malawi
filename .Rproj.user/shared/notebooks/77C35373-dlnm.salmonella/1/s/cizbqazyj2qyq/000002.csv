@@ -1,8 +1,0 @@
-"0","climate.temp.spin <- subset(climate.temp, year(climate.temp$date)<2011, select=c(date,temperature_obs)) "
-"0","climate.temp.spin$month <- month(climate.temp.spin$date)"
-"0","climate.temp.spin$year <- year(climate.temp.spin$date); climate.temp.spin$date <- NULL"
-"0","climate.temp.spin <- spread(climate.temp.spin, year, temperature_obs); climate.temp.spin <- as.matrix(climate.temp.spin)[,-1]"
-"0","YMD5 <- plot_ly(x=c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y=c(""Jan"",""Feb"",""Mar"",""Apr"",""May"",""Jun"",""Jul"",""Aug"",""Sep"",""Oct"",""Nov"",""Dec""), "
-"0","z=~climate.temp.spin, type=""contour"", colorscale='heatmap', contours=list(showlabels=TRUE)) %>% "
-"0","colorbar(title=""Temperature (°C)"") %>%"
-"0","layout(title=""C"", xaxis=list(title=""Year""), yaxis=list(title=""Month""), font=list(size=13))"

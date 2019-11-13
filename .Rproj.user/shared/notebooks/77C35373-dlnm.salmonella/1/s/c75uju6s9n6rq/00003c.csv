@@ -1,1 +1,0 @@
-"0","plot(nts.pred.temp, ""contour"", key.title=title(""NTS""), plot.title=title("""", xlab =""Temperature (°C)"", ylab = ""Lag (month)"", cex.lab=1.7, cex.axis=1.7))"

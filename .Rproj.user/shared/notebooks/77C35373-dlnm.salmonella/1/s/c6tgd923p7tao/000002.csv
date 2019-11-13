@@ -1,4 +1,0 @@
-"0","case.typhi <- tk_tbl(case.typhi, preserve_index=TRUE, rename_index=""date"") "
-"0","case.iNTS <- tk_tbl(case.iNTS, preserve_index=TRUE, rename_index=""date"") "
-"0","climate.rain <- tk_tbl(climate.rain, preserve_index=TRUE, rename_index=""date"") "
-"0","climate.temp <- tk_tbl(climate.temp, preserve_index=TRUE, rename_index=""date"") "

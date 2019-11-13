@@ -1,2 +1,0 @@
-"0","par(mfrow=c(3,4))"
-"0","plot(mo.dlnmN$date, residuals(nts.model,type=""deviance""), pch=19, cex=0.8, col=grey(0.4),main=""A"", ylab=""Residuals"",xlab="""",cex.lab=1.2,cex.axis=1.2) "

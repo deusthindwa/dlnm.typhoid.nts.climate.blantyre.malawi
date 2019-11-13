@@ -1,2 +1,0 @@
-"0","par(mfrow=c(2,2))"
-"0","plot(nts.pred.rain, xlab=""Rainfall (mm)"", ylab=""Lag (month)"", zlab=""RR of NTS"", theta=150, phi=5, lphi=100, cex.lab=1.1, cex.axis=1.1, col=""gray80"",main=""A"")"

@@ -1,6 +1,0 @@
-"0","climate$climate_date <- dmy(climate$date)"
-"0","climate$rainfall <- (climate$chil_r+climate$chic_r)/2 "
-"0","climate$temperature <- ((climate$chil_mint+climate$chil_maxt)/2+(climate$chic_mint+climate$chic_maxt)/2)/2"
-"0","climate <- subset(climate, select=c(climate_date, rainfall, temperature))"
-"0","climate.rain <- subset(climate, select=c(climate_date, rainfall))"
-"0","climate.temp <- subset(climate, select=c(climate_date, temperature))"

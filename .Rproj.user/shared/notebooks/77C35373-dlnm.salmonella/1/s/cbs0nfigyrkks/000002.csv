@@ -1,4 +1,0 @@
-"0","climate.rain <- as.xts(climate.rain[,-1, drop=FALSE], order.by=as.Date(climate.rain[,1]))"
-"0","climate.temp <- as.xts(climate.temp[,-1, drop=FALSE], order.by=as.Date(climate.temp[,1]))"
-"0","climate.rain <- apply.monthly(climate.rain, FUN=mean)"
-"0","climate.temp <- apply.monthly(climate.temp, FUN=mean)"

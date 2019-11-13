@@ -1,2 +1,0 @@
-"0","typ.pred.rain <- crosspred(typ.cb.rain1, typ.modelR, cen=0, by=0.2)"
-"0","typ.pred.temp <- crosspred(typ.cb.temp, typ.modelT, cen=23, by=0.2)"

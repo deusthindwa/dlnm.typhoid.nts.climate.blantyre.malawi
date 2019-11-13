@@ -1,2 +1,0 @@
-"0","nts.model <- update(nts.model,.~.+Lag(residuals(nts.model,type=""deviance""), 1)) #add residuals at lag 1 "
-"0","pacf(residuals(nts.model,type=""deviance""), na.action=na.omit, main=""Adjusted model with Rain & Temp"", xlim=c(0,8))"

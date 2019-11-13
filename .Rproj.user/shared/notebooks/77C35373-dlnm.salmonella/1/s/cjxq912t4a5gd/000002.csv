@@ -1,7 +1,0 @@
-"0","case.iNTS.ts <- ts(na.omit(case.iNTS$case_count), frequency=12)"
-"0","trend_n <- tk_tbl(exp(seasadj(mstl(log(case.iNTS.ts)))), preserve_index=FALSE)"
-"0","case.iNTS$case_count_sea <- trend_n$value "
-"0","case.iNTS$case_count_sea[case.iNTS$case_count_sea < 0] <- 0"
-"0","setnames(case.iNTS, old=""case_count"", new=""case_count_obs"")"
-"0","trend_n <-tk_tbl(exp(mstl(log(case.iNTS.ts))))"
-"0","case.iNTS$case_count_tre <- trend_n$Trend"

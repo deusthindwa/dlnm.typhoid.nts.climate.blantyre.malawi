@@ -1,8 +1,0 @@
-"0","case.iNTS.spi <- subset(case.iNTS, year(case.iNTS$date)<2011, select=c(date,incid_sea)) "
-"0","case.iNTS.spi$month <-month(case.iNTS.spi$date)"
-"0","case.iNTS.spi$year <- year(case.iNTS.spi$date); case.iNTS.spi$date <- NULL"
-"0","case.iNTS.spi <- spread(case.iNTS.spi, year, incid_sea); case.iNTS.spi <- as.matrix(case.iNTS.spi)[,-1]"
-"0","YMD1 <- plot_ly(x=c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y=c(""Jan"",""Feb"",""Mar"",""Apr"",""May"",""Jun"",""Jul"",""Aug"",""Sep"",""Oct"",""Nov"",""Dec""), "
-"0","z=~case.iNTS.spi, type=""contour"", colorscale='jet', contours=list(showlabels=TRUE)) %>% "
-"0","colorbar(title=""NTS incidence per \n 100,000 population"") %>%"
-"0","layout(title=""A"", xaxis=list(title=""Year""), yaxis=list(title=""Month""), font=list(size=13))"

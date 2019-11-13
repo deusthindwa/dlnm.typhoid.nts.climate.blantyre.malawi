@@ -1,5 +1,0 @@
-"0","case <-read.csv(curl(""https://raw.githubusercontent.com/deusthindwa/dlnm.typhoid.nts.climate.blantyre.malawi/master/data/case.csv""))"
-"0","case$case_date <- dmy(case$case_date)"
-"0","case$case_count <- c(1)"
-"0","case.typhi <- subset(case, organism==""typhi"")"
-"0","case.iNTS <- subset(case, organism==""iNTS"")"

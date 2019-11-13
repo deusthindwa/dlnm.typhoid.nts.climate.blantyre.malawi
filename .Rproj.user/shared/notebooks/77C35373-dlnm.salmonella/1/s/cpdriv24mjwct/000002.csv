@@ -1,2 +1,0 @@
-"0","typ.modelR <- glm(mo.dlnmT$incid_seaX ~ typ.cb.rain1 + year, family=quasipoisson(), na.action=na.delete, mo.dlnmT)"
-"0","typ.modelT <- glm(mo.dlnmT$incid_seaX ~ typ.cb.temp + typ.cb.rain2 + year, family=quasipoisson(), na.action=na.delete, mo.dlnmT)"

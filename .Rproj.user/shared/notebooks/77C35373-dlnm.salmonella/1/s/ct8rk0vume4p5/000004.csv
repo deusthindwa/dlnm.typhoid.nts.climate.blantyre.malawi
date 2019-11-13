@@ -1,1 +1,0 @@
-"0","plot(nts.pred.rain, ""slices"", xlab=""Rainfall (mm) [given lag 2]"", lag=c(2), col=""orange2"", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab=""RR of NTS"", cex.lab=1.1, cex.axis=1.1,main=""B"")"

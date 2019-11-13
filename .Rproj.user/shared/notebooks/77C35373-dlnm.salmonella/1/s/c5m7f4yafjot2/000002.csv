@@ -1,8 +1,0 @@
-"0","case.typhi <-aggregate(case.typhi$case_count, by=list(case.typhi$case_date), FUN=sum, na.rm=TRUE)"
-"0","names(case.typhi) <- c(""date"", ""case_count"")"
-"0","case.typhi <- merge(case.typhi, data.table(date=seq.Date(min(case$case_date), max(case$case_date), by=""day"")), by=""date"", all=TRUE)"
-"0","case.typhi[is.na(case.typhi)]<-0"
-"0","case.iNTS <-aggregate(case.iNTS$case_count, by=list(case.iNTS$case_date), FUN=sum, na.rm=TRUE)"
-"0","names(case.iNTS) <- c(""date"", ""case_count"")"
-"0","case.iNTS <- merge(case.iNTS, data.table(date=seq.Date(min(case$case_date), max(case$case_date), by=""day"")), by=""date"", all=TRUE)"
-"0","case.iNTS[is.na(case.iNTS)]<-0"

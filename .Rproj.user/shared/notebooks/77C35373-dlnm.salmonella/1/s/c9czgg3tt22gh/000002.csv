@@ -1,5 +1,0 @@
-"0","blantyre.demog <- read.csv(curl(""https://raw.githubusercontent.com/deusthindwa/dlnm.typhoid.nts.climate.blantyre.malawi/master/data/blantyre_demog.csv""))"
-"0","	map.features <- read.csv(curl(""https://raw.githubusercontent.com/deusthindwa/dlnm.typhoid.nts.climate.blantyre.malawi/master/data/blantyre_features.csv""))"
-"0","	blantyre.demog$id <- as.integer(blantyre.demog$id)"
-"0","	map.all <- merge(x=blantyre.map, y=blantyre.demog, by=""id"", x.all=TRUE)"
-"0","	rm(list = ls()[grep(""^blantyre"", ls())])"

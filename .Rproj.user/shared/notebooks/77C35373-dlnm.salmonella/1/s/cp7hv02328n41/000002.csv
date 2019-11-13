@@ -1,8 +1,0 @@
-"0","case.typhi.spi <- subset(case.typhi, year(case.typhi$date)>2010, select=c(date,incid_sea)) "
-"0","case.typhi.spi$month <- month(case.typhi.spi$date)"
-"0","case.typhi.spi$year <- year(case.typhi.spi$date); case.typhi.spi$date <- NULL"
-"0","case.typhi.spi <- spread(case.typhi.spi, year, incid_sea); case.typhi.spi <- as.matrix(case.typhi.spi)[,-1]"
-"0","YMD2 <- plot_ly(x = c(2011,2012,2013,2014,2015), y=c(""Jan"",""Feb"",""Mar"",""Apr"",""May"",""Jun"",""Jul"",""Aug"",""Sep"",""Oct"",""Nov"",""Dec""), "
-"0","z=~case.typhi.spi, type=""contour"", colorscale='heatmap', contours=list(showlabels=TRUE)) %>% "
-"0","colorbar(title=""Typhoid incidence per \n 100,000 population"") %>%"
-"0","layout(title=""D"", xaxis=list(title=""Year""), yaxis=list(title=""Month""), font=list(size=13))"

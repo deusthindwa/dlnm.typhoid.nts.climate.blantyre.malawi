@@ -1,8 +1,0 @@
-"0","climate.rain.spit <- subset(climate.rain, year(climate.rain$date)>2010, select=c(date,rainfall_obs)) "
-"0","climate.rain.spit$month <- month(climate.rain.spit$date)"
-"0","climate.rain.spit$year <- year(climate.rain.spit$date); climate.rain.spit$date <- NULL"
-"0","climate.rain.spit <- spread(climate.rain.spit, year, rainfall_obs); climate.rain.spit <- as.matrix(climate.rain.spit)[,-1]"
-"0","YMD4 <- plot_ly(x = c(2011,2012,2013,2014,2015), y=c(""Jan"",""Feb"",""Mar"",""Apr"",""May"",""Jun"",""Jul"",""Aug"",""Sep"",""Oct"",""Nov"",""Dec""), "
-"0","z=~climate.rain.spit, type=""contour"", colorscale='heatmap', contours=list(showlabels=TRUE)) %>% "
-"0","colorbar(title=""Rainfall (mm)"") %>%"
-"0","layout(title=""E"", xaxis=list(title=""Year""), yaxis=list(title=""Month""), font=list(size=13))"

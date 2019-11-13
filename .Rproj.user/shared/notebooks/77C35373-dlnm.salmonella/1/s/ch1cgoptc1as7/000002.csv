@@ -1,2 +1,0 @@
-"0","par(mfrow=c(1,2))"
-"0","pacf(residuals(nts.model,type=""deviance""), na.action=na.omit, main=""Original model with Rain & Temp"", xlim=c(0,8))"

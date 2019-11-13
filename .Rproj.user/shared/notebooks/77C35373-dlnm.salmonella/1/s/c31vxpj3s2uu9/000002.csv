@@ -1,4 +1,0 @@
-"0","census.year <-c(1998, 2008)"
-"0","census.popn <-c(809397, 1022680)"
-"0","census.count.1998.2008 <-approx(census.year, census.popn, n=11) "
-"0","census.count.2009.2015 <-approxExtrap(census.year, census.popn, xout=c(2009, 2010, 2011, 2012, 2013, 2014, 2015))"

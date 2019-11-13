@@ -1,1 +1,0 @@
-"0","pacf(residuals(typ.modelT,type=""deviance""),na.action=na.omit,main=""J"",xlim=c(0,8),xlab=""Lag (month)"",cex.lab=1.2, cex.axis=1.2)"

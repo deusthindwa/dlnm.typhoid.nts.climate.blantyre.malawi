@@ -1,4 +1,0 @@
-"0","case.typhi = as.xts(case.typhi[,-1,drop=FALSE], order.by=as.Date(case.typhi[,1]))"
-"0","case.iNTS = as.xts(case.iNTS[,-1,drop=FALSE], order.by=as.Date(case.iNTS[,1]))"
-"0","case.typhi <- apply.monthly(case.typhi, FUN=sum)"
-"0","case.iNTS <- apply.monthly(case.iNTS, FUN=sum)"

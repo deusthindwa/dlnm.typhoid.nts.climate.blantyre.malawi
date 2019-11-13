@@ -1,2 +1,0 @@
-"0","par(mfrow=c(2,3))"
-"0","plot(nts.pred.temp, xlab=""Temperature (°C)"", ylab=""Lag (month)"", zlab=""RR of NTS"", theta=150, phi=5, lphi=100, cex.lab=1, cex.axis=1, col=""gray80"",main=""A"")"

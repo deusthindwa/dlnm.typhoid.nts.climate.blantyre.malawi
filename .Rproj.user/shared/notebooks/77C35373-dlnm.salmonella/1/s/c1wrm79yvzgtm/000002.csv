@@ -1,8 +1,0 @@
-"0","climate.temp.spit <- subset(climate.temp, year(climate.temp$date)>2010, select=c(date,temperature_obs)) "
-"0","climate.temp.spit$month <- month(climate.temp.spit$date)"
-"0","climate.temp.spit$year <- year(climate.temp.spit$date); climate.temp.spit$date <- NULL"
-"0","climate.temp.spit <- spread(climate.temp.spit, year, temperature_obs); climate.temp.spit <- as.matrix(climate.temp.spit)[,-1]"
-"0","YMD6 <- plot_ly(x=c(2011,2012,2013,2014,2015), y=c(""Jan"",""Feb"",""Mar"",""Apr"",""May"",""Jun"",""Jul"",""Aug"",""Sep"",""Oct"",""Nov"",""Dec""), "
-"0","z=~climate.temp.spit, type=""contour"", colorscale='heatmap', contours=list(showlabels=TRUE)) %>%"
-"0","colorbar(title=""Temperature (°C)"") %>%"
-"0","layout(title=""F"", xaxis=list(title=""Year""), yaxis=list(title=""Month""), font=list(size = 13))"

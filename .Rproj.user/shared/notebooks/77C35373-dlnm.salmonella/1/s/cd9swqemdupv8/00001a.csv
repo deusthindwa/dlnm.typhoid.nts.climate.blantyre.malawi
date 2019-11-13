@@ -1,1 +1,0 @@
-"0","plot(mo.dlnmT$date, residuals(typ.modelT,type=""deviance""), pch=19, cex=0.8, col=grey(0.6),main=""I"", ylab=""Residuals"", xlab=""Year"",cex.lab=1.2,cex.axis=1.2) "

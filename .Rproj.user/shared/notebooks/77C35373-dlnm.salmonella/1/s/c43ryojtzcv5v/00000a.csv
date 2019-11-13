@@ -1,1 +1,0 @@
-"0","plot(typ.pred.rain, xlab=""Month-lag (given 16 mm)"", ""slices"", var=c(16), col=""red2"", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95,ci='b', lwd=4.5, ylab=""RR of typhoid"", cex.lab=1.1, cex.axis=1.1,main=""E"")"

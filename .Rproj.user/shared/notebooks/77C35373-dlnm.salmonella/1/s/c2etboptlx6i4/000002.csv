@@ -1,7 +1,0 @@
-"0","climate.rain.ts <- ts(na.omit(climate.rain$rainfall), frequency=12)"
-"0","trend_n <- tk_tbl(seasadj(mstl(climate.rain.ts)), preserve_index=FALSE)"
-"0","climate.rain$rainfall_sea <- trend_n$value"
-"0","climate.rain$rainfall_sea[climate.rain$rainfall_sea < 0] <- 0"
-"0","setnames(climate.rain, old=""rainfall"", new=""rainfall_obs"")"
-"0","trend_n <-tk_tbl(mstl(climate.rain.ts))"
-"0","climate.rain$rain_tre <- trend_n$Trend"

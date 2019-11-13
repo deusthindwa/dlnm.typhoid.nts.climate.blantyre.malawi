@@ -1,7 +1,0 @@
-"0","case.typhi.ts <- ts(na.omit(case.typhi$case_count), frequency=12)"
-"0","trend_n <- tk_tbl(exp(seasadj(mstl(log(case.typhi.ts+1)))), preserve_index=FALSE)"
-"0","case.typhi$case_count_sea <-trend_n$value"
-"0","case.typhi$case_count_sea[case.typhi$case_count_sea < 0] <- 0"
-"0","setnames(case.typhi, old=""case_count"", new=""case_count_obs"")"
-"0","trend_n <- tk_tbl(exp(mstl(log(case.typhi.ts+1))))"
-"0","case.typhi$case_count_tre <- trend_n$Trend"

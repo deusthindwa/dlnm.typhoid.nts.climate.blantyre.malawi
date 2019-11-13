@@ -1,2 +1,0 @@
-"0","blantyre.map <- rbind(fortify(malawi.map[blantyre1.map,]), fortify(malawi.map[blantyre2.map,]), fortify(malawi.map[blantyre3.map,]))"
-"0","blantyre.map$id <- as.integer(blantyre.map$id)"

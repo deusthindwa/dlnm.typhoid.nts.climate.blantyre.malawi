@@ -1,7 +1,0 @@
-"0","climate.rain.spin <- subset(climate.rain, year(climate.rain$date)<2011, select=c(date,rainfall_obs)) "
-"0","climate.rain.spin$month <- month(climate.rain.spin$date)"
-"0","climate.rain.spin$year <- year(climate.rain.spin$date); climate.rain.spin$date <- NULL"
-"0","climate.rain.spin <- spread(climate.rain.spin, year, rainfall_obs); climate.rain.spin <- as.matrix(climate.rain.spin)[,-1]"
-"0","YMD3 <- plot_ly(x = c(2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010), y=c(""Jan"",""Feb"",""Mar"",""Apr"",""May"",""Jun"",""Jul"",""Aug"",""Sep"",""Oct"",""Nov"",""Dec""), "
-"0","z=~climate.rain.spin, type=""contour"", colorscale='heatmap', contours=list(showlabels=TRUE)) %>% colorbar(title=""Rainfall (mm)"") %>% "
-"0","layout(title=""B"", xaxis=list(title=""Year""), yaxis=list(title=""Month""), font=list(size=13))"

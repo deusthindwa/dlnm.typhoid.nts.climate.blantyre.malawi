@@ -1,5 +1,0 @@
-"0","x<-case.iNTS.ts %>% mstl() %>% ggfortify:::autoplot.ts(main=""A"",xlab=""Years (2000-2015)"",size=1,colour=""orange2"",is.date=FALSE)+theme_bw()"
-"0","y<-case.typhi.ts %>% mstl() %>% ggfortify:::autoplot.ts(main=""B"",xlab=""Years (2000-2015)"",size=1,colour=""red2"",is.date=FALSE)+theme_bw()"
-"0","z<-climate.rain.ts %>% mstl() %>% ggfortify:::autoplot.ts(main=""C"",xlab=""Years (2000-2015)"",size=1,colour=""blue2"",is.date=FALSE)+theme_bw()"
-"0","v<-climate.temp.ts %>% mstl() %>% ggfortify:::autoplot.ts(main=""D"",xlab=""Years (2000-2015)"",size=1,colour=""green2"",is.date=FALSE)+theme_bw()"
-"0","grid.arrange(grobs=list(x,y,z,v), ncol=4, nrow=1)"
