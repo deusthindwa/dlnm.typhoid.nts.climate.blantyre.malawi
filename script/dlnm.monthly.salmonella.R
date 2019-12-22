@@ -310,7 +310,7 @@ agesex.p1<-datNoUnknowns %>%
   labs(title="A", x ="Age (years)", y = "Number of iNTS cases") + 
   theme(axis.text.x = element_text(face="bold", size=10, color="black"), axis.text.y = element_text(face="bold", size=10, color="black")) + 
   theme(legend.justification=c(0.5,0), legend.position = c(0.5, 0.6), legend.text = element_text(size = 10), legend.title = element_text(size = 10)) + 
-  labs(fill="Missing sex: 2,596 (32.3%)") + 
+  labs(fill="Missing age and sex: 2,596 (32.3%)") + 
   theme(legend.key.height=unit(0.8,"line")) + 
   theme(legend.key.width=unit(0.8,"line"))
 
@@ -326,7 +326,7 @@ agesex.p2<-datNoUnknowns %>%
   labs(title="B", x ="Age (years)", y = "Number of typhoid cases") +
   theme(axis.text.x = element_text(face="bold", size=10, color="black"), axis.text.y = element_text(face="bold", size=10, color="black")) + 
   theme(legend.justification=c(0.5,0), legend.position = c(0.5, 0.6), legend.text = element_text(size = 10), legend.title = element_text(size = 10)) + 
-  labs(fill="Missing sex: 61 (2.4%)") + 
+  labs(fill="Missing age and sex: 61 (2.4%)") + 
   theme(legend.key.height=unit(0.8,"line")) + 
   theme(legend.key.width=unit(0.8,"line"))
 
@@ -489,23 +489,23 @@ mo.pred.temp.iNTS <- crosspred(mo.cb.temp.iNTS, mo.model.iNTS, cen = 23, by=0.2)
 #----------plotting countour and curves for rainfall on iNTS
 dev.off()
 par(mar=c(5,5,2,2)+0.1)
-plot(mo.pred.rain.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Daily rainfall (mm)", ylab = "Lag (month)", cex.lab=1.3, cex.axis=1.5,main="A"))
-plot(mo.pred.rain.iNTS, "slices", xlab="Monthly lag (given 9 mm/day)", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of iNTS", cex.lab=1.3, cex.axis=1.5,main="B")
-plot(mo.pred.rain.iNTS, "slices", xlab="Monthly lag (given 13 mm/day)", var=c(13), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of iNTS", cex.lab=1.3, cex.axis=1.5,main="C")
+plot(mo.pred.rain.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Mean monthly rainfall (mm)", ylab = "Monthly lag", cex.lab=1.3, cex.axis=1.5,main="A"))
+plot(mo.pred.rain.iNTS, "slices", xlab="Monthly lag (given mean 9 mm/month)", var=c(9), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of iNTS", cex.lab=1.3, cex.axis=1.5,main="B")
+plot(mo.pred.rain.iNTS, "slices", xlab="Monthly lag (given mean 13 mm/month)", var=c(13), col="orange2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of iNTS", cex.lab=1.3, cex.axis=1.5,main="C")
 
 #----------plotting countour and curves for temperature on iNTS
 dev.off()
 par(mar=c(5,5,2,2)+1)
-plot(mo.pred.temp.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Daily temperature (°C)", ylab = "Lag (month)", cex.lab=1.3, cex.axis=1.5,main="A"))
-plot(mo.pred.temp.iNTS, xlab="Monthly lag (given 19 °C/day)", "slices", var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of iNTS", cex.lab=1.3, cex.axis=1.5,main="B")
-plot(mo.pred.temp.iNTS, xlab="Monthly lag (given 29 °C/day)", "slices", var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of iNTS", cex.lab=1.3, cex.axis=1.5,main="C")
+plot(mo.pred.temp.iNTS, "contour", key.title=title("iNTS"), plot.title=title("", xlab ="Mean monthly temperature (°C)", ylab = "Monthly lag", cex.lab=1.3, cex.axis=1.5,main="A"))
+plot(mo.pred.temp.iNTS, xlab="Monthly lag (given mean 19 °C/month)", "slices", var=c(19), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of iNTS", cex.lab=1.3, cex.axis=1.5,main="B")
+plot(mo.pred.temp.iNTS, xlab="Monthly lag (given mean 29 °C/month)", "slices", var=c(29), col="orange2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of iNTS", cex.lab=1.3, cex.axis=1.5,main="C")
 
 #----------construct cross-basis for typhoid using optimal dfs to predict rainfall effect
 sort(mo.dlnmT$rainfall_obs, decreasing = FALSE)
 varknots=equalknots(mo.dlnmT$rainfall_obs, fun = "ns", df=4)
 lagknots <- logknots(8, df=3)
 mo.cb.rain.typhoid1 <- crossbasis(mo.dlnmT$rainfall_obs, lag =8, argvar = list(knots=varknots), arglag = list(knots=lagknots))
-summary(mo.cb.rain.typhoid)
+summary(mo.cb.rain.typhoid1)
 
 #----------model fitting for typhoid
 mo.model.typhoid1 <- glm(incid_obsX ~ mo.cb.rain.typhoid1 + month + year, family = quasipoisson(), na.action=na.exclude, mo.dlnmT)
@@ -522,16 +522,16 @@ mo.pred.rain.typhoid1 <- crosspred(mo.cb.rain.typhoid1, mo.model.typhoid1, cen =
 #----------plotting countour and curves for rainfall on typhoid
 dev.off()
 par(mar=c(5,5,2,2)+1)
-plot(mo.pred.rain.typhoid1, "contour", key.title=title("typhoid"), plot.title=title("", xlab ="Daily rainfall (mm)", ylab = "Lag (month)", cex.lab=1.3, cex.axis=1.5,main="D"))
-plot(mo.pred.rain.typhoid1, xlab="Monthly lag (given 9 mm/day)", "slices",var=c(9), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="E")
-plot(mo.pred.rain.typhoid1, xlab="Monthly lag (given 13 mm/day)", "slices",var=c(13), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="F")
+plot(mo.pred.rain.typhoid1, "contour", key.title=title("typhoid"), plot.title=title("", xlab ="Mean monthly rainfall (mm)", ylab = "Monthly lag", cex.lab=1.3, cex.axis=1.5,main="D"))
+plot(mo.pred.rain.typhoid1, xlab="Monthly lag (given mean 9 mm/month)", "slices",var=c(9), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="E")
+plot(mo.pred.rain.typhoid1, xlab="Monthly lag (given mean 13 mm/month)", "slices",var=c(13), col="red2", ci.arg=list(col=terrain.colors(70, alpha = 1)), ci.level=0.95, ci='b',lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="F")
 
 #----------construct cross-basis for typhoid using optimal dfs to predict temperature effect
 sort(mo.dlnmT$rainfall_obs, decreasing = FALSE)
 varknots=equalknots(mo.dlnmT$rainfall_obs, fun = "ns", df=3)
 lagknots <- logknots(8, df=3)
 mo.cb.rain.typhoid2 <- crossbasis(mo.dlnmT$rainfall_obs, lag =8, argvar = list(knots=varknots), arglag = list(knots=lagknots))
-summary(mo.cb.rain.typhoid)
+summary(mo.cb.rain.typhoid2)
 
 sort(mo.dlnmT$temperature_obs, decreasing = FALSE)
 varknots=equalknots(mo.dlnmT$temperature_obs, fun = "ns", df=3)
@@ -552,10 +552,10 @@ mo.pred.temp.typhoid2 <- crosspred(mo.cb.temp.typhoid, mo.model.typhoid2, cen = 
 #----------plotting countour and curves for temperature on typhoid
 dev.off()
 par(mar=c(5,5,2,2)+0.1)
-plot(mo.pred.temp.typhoid2, "contour", key.title=title("typhoid"), plot.title=title("", xlab ="Daily temperature (°C)", ylab = "Lag (month)", cex.lab=1.3, cex.axis=1.5,main="D"))
-plot(mo.pred.temp.typhoid2, "slices", xlab="Monthly lag (given 19 °C/day)", var=c(19), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="E")
-plot(mo.pred.temp.typhoid2, "slices", xlab="Monthly lag (given 25 °C/day)", var=c(25), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="F")
-plot(mo.pred.temp.typhoid2, "slices", xlab="Monthly lag (given 29 °C/day)", var=c(29), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="G")
+plot(mo.pred.temp.typhoid2, "contour", key.title=title("typhoid"), plot.title=title("", xlab ="Mean monthly temperature (°C)", ylab = "Monthly lag", cex.lab=1.3, cex.axis=1.5,main="D"))
+plot(mo.pred.temp.typhoid2, "slices", xlab="Monthly lag (given mean 19 °C/month)", var=c(19), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="E")
+plot(mo.pred.temp.typhoid2, "slices", xlab="Monthly lag (given mean 25 °C/month)", var=c(25), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="F")
+plot(mo.pred.temp.typhoid2, "slices", xlab="Monthly lag (given mean 29 °C/month)", var=c(29), col="red2", ci.arg=list(col=topo.colors(70, alpha = 1)), ci.level=0.95, ci='b', lwd=4.5, ylab="RR of typhoid", cex.lab=1.3, cex.axis=1.5,main="G")
 
 #----------plot iNTS model diagnostic plots (rainfall+temperature)
 dev.off()
@@ -588,7 +588,7 @@ mo.pred.rain.iNTS$matRRfit["13",],mo.pred.rain.iNTS$matRRlow["13",],mo.pred.rain
 mo.pred.temp.iNTS$matRRfit["19",],mo.pred.temp.iNTS$matRRlow["19",],mo.pred.temp.iNTS$matRRhigh["19",],
 mo.pred.temp.iNTS$matRRfit["29",],mo.pred.temp.iNTS$matRRlow["29",],mo.pred.temp.iNTS$matRRhigh["29",],
 mo.pred.rain.typhoid1$matRRfit["9",],mo.pred.rain.typhoid1$matRRlow["9",],mo.pred.rain.typhoid1$matRRhigh["9",],
-mo.pred.rain.typhoid1$matRRfit["16",],mo.pred.rain.typhoid1$matRRlow["16",],mo.pred.rain.typhoid1$matRRhigh["16",],
+mo.pred.rain.typhoid1$matRRfit["13",],mo.pred.rain.typhoid1$matRRlow["13",],mo.pred.rain.typhoid1$matRRhigh["13",],
 mo.pred.temp.typhoid2$matRRfit["19",],mo.pred.temp.typhoid2$matRRlow["19",],mo.pred.temp.typhoid2$matRRhigh["19",],
 mo.pred.temp.typhoid2$matRRfit["25",],mo.pred.temp.typhoid2$matRRlow["25",],mo.pred.temp.typhoid2$matRRhigh["25",]
 ))
@@ -661,19 +661,19 @@ nts.pred.temp.s5 <- crosspred(nts.cb.temp.s5, nts.model.s5, cen=23, by=0.2)
 nts.pred.temp.s6 <- crosspred(nts.cb.temp.s6, nts.model.s6, cen=23, by=0.2)
 
 par(mfrow=c(2,6))
-plot(nts.pred.rain.s1,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="A")
-plot(nts.pred.rain.s2,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="C")
-plot(nts.pred.rain.s3,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="E")
-plot(nts.pred.rain.s4,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="G")
-plot(nts.pred.rain.s5,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="I")
-plot(nts.pred.rain.s6,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="K")
+plot(nts.pred.rain.s1,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="A")
+plot(nts.pred.rain.s2,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="C")
+plot(nts.pred.rain.s3,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="E")
+plot(nts.pred.rain.s4,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="G")
+plot(nts.pred.rain.s5,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="I")
+plot(nts.pred.rain.s6,"slices",var=c(9),col="orange2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="K")
 
-plot(nts.pred.temp.s1,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="B")
-plot(nts.pred.temp.s2,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="D")
-plot(nts.pred.temp.s3,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="F")
-plot(nts.pred.temp.s4,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="H")
-plot(nts.pred.temp.s5,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="J")
-plot(nts.pred.temp.s6,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="L")
+plot(nts.pred.temp.s1,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 19 °C/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="B")
+plot(nts.pred.temp.s2,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 19 °C/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="D")
+plot(nts.pred.temp.s3,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 19 °C/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="F")
+plot(nts.pred.temp.s4,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 19 °C/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="H")
+plot(nts.pred.temp.s5,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 19 °C/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="J")
+plot(nts.pred.temp.s6,"slices",var=c(19),col="orange2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 19 °C/M)",ylab="RR of iNTS",cex.lab=1.1,cex.axis=1.1,main="L")
 
 #----------formulate alternative sensitivity models and plot predictions of Typhoid (Supplementay Figure S6)
 typ.cb.rain.s1 <- typ.cb.rain[[2]]; typ.cb.temp.s1 <- typ.cb.temp[[2]]
@@ -730,19 +730,19 @@ typ.pred.temp.s5 <- crosspred(typ.cb.temp.s5, typ.modelT.s5, cen=23, by=0.2)
 typ.pred.temp.s6 <- crosspred(typ.cb.temp.s6, typ.modelT.s6, cen=23, by=0.2)
 
 par(mfrow=c(2,6))
-plot(typ.pred.rain.s1,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="A")
-plot(typ.pred.rain.s2,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="C")
-plot(typ.pred.rain.s3,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="E")
-plot(typ.pred.rain.s4,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="G")
-plot(typ.pred.rain.s5,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="I")
-plot(typ.pred.rain.s6,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 9 mm/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="K")
+plot(typ.pred.rain.s1,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="A")
+plot(typ.pred.rain.s2,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="C")
+plot(typ.pred.rain.s3,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="E")
+plot(typ.pred.rain.s4,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="G")
+plot(typ.pred.rain.s5,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="I")
+plot(typ.pred.rain.s6,"slices",var=c(9),col="red2",ci.arg=list(col=topo.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Monthly lag (mean 9 mm/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="K")
 
-plot(typ.pred.temp.s1,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR oftyphoid",cex.lab=1.1,cex.axis=1.1,main="B")
-plot(typ.pred.temp.s2,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="D")
-plot(typ.pred.temp.s3,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="F")
-plot(typ.pred.temp.s4,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="H")
-plot(typ.pred.temp.s5,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="J")
-plot(typ.pred.temp.s6,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (given 19 °C/d)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="L")
+plot(typ.pred.temp.s1,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (mean 19 °C/M)",ylab="RR oftyphoid",cex.lab=1.1,cex.axis=1.1,main="B")
+plot(typ.pred.temp.s2,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (mean 19 °C/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="D")
+plot(typ.pred.temp.s3,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (mean 19 °C/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="F")
+plot(typ.pred.temp.s4,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (mean 19 °C/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="H")
+plot(typ.pred.temp.s5,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (mean 19 °C/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="J")
+plot(typ.pred.temp.s6,"slices",var=c(19),col="red2",ci.arg=list(col=terrain.colors(70,alpha=1)),ci.level=0.95,ci='b',lwd=4.5,xlab="Month-lag (mean 19 °C/M)",ylab="RR of typhoid",cex.lab=1.1,cex.axis=1.1,main="L")
 
 #----------descriptive stats of the study population seasonal-unadjusted
 ci(mo.dlnmN$incid_obsX)
