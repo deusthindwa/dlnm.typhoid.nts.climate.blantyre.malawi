@@ -32,7 +32,7 @@ case.iNTS[is.na(case.iNTS)] <- 0
 case.typhi = as.xts(case.typhi[,-1,drop = FALSE], order.by = as.Date(case.typhi[,1]))
 case.iNTS = as.xts(case.iNTS[,-1,drop = FALSE], order.by = as.Date(case.iNTS[,1]))
 
-#----------weekly or monthly sum for typhi and iNTS cases.
+#----------weekly sum for typhi and iNTS cases.
 case.typhi <- apply.weekly(case.typhi, FUN = sum)
 case.iNTS <- apply.weekly(case.iNTS, FUN = sum)
 
@@ -53,8 +53,7 @@ climate.temp <- subset(climate, select = c(climate_date, temperature))
 climate.rain = as.xts(climate.rain[,-1,drop = FALSE], order.by = as.Date(climate.rain[,1]))
 climate.temp = as.xts(climate.temp[,-1,drop = FALSE], order.by = as.Date(climate.temp[,1]))
 
-#----------monthly mean for rainfall and temperature
-
+#----------weekly mean for rainfall and temperature
 climate.rain <- apply.weekly(climate.rain, FUN = mean)
 climate.temp <- apply.weekly(climate.temp, FUN = mean)
 
@@ -84,7 +83,7 @@ census.popn <-c(809397, 1022680)
 census.count.1998.2008 <- approx(census.year, census.popn, n=11) 
 census.count.2009.2015 <- approxExtrap(census.year, census.popn, xout=c(2009, 2010, 2011, 2012, 2013, 2014, 2015))
 
-#----------calculated incidence of monthly iNTS
+#----------calculated incidence of weekly iNTS
 case.iNTS$census[year(case.iNTS$date)==2000]<- 852054; case.iNTS$census[year(case.iNTS$date)==2001]<-873382
 case.iNTS$census[year(case.iNTS$date)==2002]<- 894710; case.iNTS$census[year(case.iNTS$date)==2003]<-916039
 case.iNTS$census[year(case.iNTS$date)==2004]<- 937367; case.iNTS$census[year(case.iNTS$date)==2005]<-958695
@@ -95,7 +94,7 @@ case.iNTS$census[year(case.iNTS$date)==2012]<-1107993; case.iNTS$census[year(cas
 case.iNTS$census[year(case.iNTS$date)==2014]<-1150650; case.iNTS$census[year(case.iNTS$date)==2015]<-1171978
 case.iNTS$incid_obs <-case.iNTS$case_count*100000/case.iNTS$census 
 
-#----------calculated incidence of monthly typhoid
+#----------calculated incidence of weekly typhoid
 case.typhi$census[year(case.typhi$date)==2000]<- 852054; case.typhi$census[year(case.typhi$date)==2001]<-873382
 case.typhi$census[year(case.typhi$date)==2002]<- 894710; case.typhi$census[year(case.typhi$date)==2003]<-916039
 case.typhi$census[year(case.typhi$date)==2004]<- 937367; case.typhi$census[year(case.typhi$date)==2005]<-958695
@@ -106,7 +105,7 @@ case.typhi$census[year(case.typhi$date)==2012]<-1107993; case.typhi$census[year(
 case.typhi$census[year(case.typhi$date)==2014]<-1150650; case.typhi$census[year(case.typhi$date)==2015]<-1171978
 case.typhi$incid_obs <-case.typhi$case_count*100000/case.typhi$census 
 
-#----------boxplots of weekly and month seasonal dynamics of iNTS and typhoid
+#----------boxplots of weekly seasonal dynamics of iNTS and typhoid
 j <- seq(from=1, to=53, by=4)
 i <- seq(from=1, to=12, by=1)
 
@@ -191,7 +190,7 @@ plot_ly(x = c(2011,2012,2013,2014,2015), z = ~climate.temp.spit, type = "contour
 colorbar(title = "Seasonal-unadjusted \n Temperature (°C)") %>%
 layout(title="<b>F</b>", xaxis=list(title ="Year",color="black"), yaxis=list(title="Week (Jan-Dec)",color="black"), font=list(size = 13))
 
-#----------prepare final monthly NTS dataset for use in DLNM
+#----------prepare final weekly NTS dataset for use in DLNM
 mo.dlnmN <- bind_cols(case.iNTS, climate.rain, climate.temp, id=NULL)
 mo.dlnmN$date1 <- mo.dlnmN$date2 <- NULL
 mo.dlnmN <- subset(mo.dlnmN, year(date) < 2011)
@@ -201,7 +200,7 @@ mo.dlnmN$month <- month(mo.dlnmN$date)
 mo.dlnmN$week <- week(mo.dlnmN$date)
 mo.dlnmN$incid_obsX<-round(mo.dlnmN$incid_obs, digits = 0)
 
-#----------prepare final monthly typhoid dataset for use in DLNM
+#----------prepare final weekly typhoid dataset for use in DLNM
 mo.dlnmT <- bind_cols(case.typhi, climate.rain, climate.temp, id=NULL)
 mo.dlnmT$date1 <- mo.dlnmT$date2 <- NULL
 mo.dlnmT <- subset(mo.dlnmT, year(date) > 2010)

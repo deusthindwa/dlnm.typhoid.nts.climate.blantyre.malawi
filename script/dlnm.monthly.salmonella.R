@@ -92,8 +92,6 @@ climate.rain = as.xts(climate.rain[,-1,drop = FALSE], order.by = as.Date(climate
 climate.temp = as.xts(climate.temp[,-1,drop = FALSE], order.by = as.Date(climate.temp[,1]))
 
 #----------monthly mean for rainfall and temperature
-climate.rainW <- apply.weekly(climate.rain, FUN = mean)
-climate.tempW <- apply.weekly(climate.temp, FUN = mean)
 climate.rain <- apply.monthly(climate.rain, FUN = mean)
 climate.temp <- apply.monthly(climate.temp, FUN = mean)
 
@@ -221,56 +219,14 @@ case.typhi$census[year(case.typhi$date)==2014]<-1150650; case.typhi$census[year(
 case.typhi$incid_sea <-case.typhi$case_count_sea*100000/case.typhi$census 
 case.typhi$incid_obs <-case.typhi$case_count_obs*100000/case.typhi$census 
 
-#----------calculated incidence of monthly iNTS
-case.iNTSW <-tk_tbl(case.iNTSW, preserve_index = TRUE, rename_index = "date") 
-case.iNTSW$census[year(case.iNTSW$date)==2000]<- 852054; case.iNTSW$census[year(case.iNTSW$date)==2001]<-873382
-case.iNTSW$census[year(case.iNTSW$date)==2002]<- 894710; case.iNTSW$census[year(case.iNTSW$date)==2003]<-916039
-case.iNTSW$census[year(case.iNTSW$date)==2004]<- 937367; case.iNTSW$census[year(case.iNTSW$date)==2005]<-958695
-case.iNTSW$census[year(case.iNTSW$date)==2006]<- 980023; case.iNTSW$census[year(case.iNTSW$date)==2007]<-1001352
-case.iNTSW$census[year(case.iNTSW$date)==2008]<-1022680; case.iNTSW$census[year(case.iNTSW$date)==2009]<-1044008
-case.iNTSW$census[year(case.iNTSW$date)==2010]<-1065337; case.iNTSW$census[year(case.iNTSW$date)==2011]<-1086665
-case.iNTSW$census[year(case.iNTSW$date)==2012]<-1107993; case.iNTSW$census[year(case.iNTSW$date)==2013]<-1129322
-case.iNTSW$census[year(case.iNTSW$date)==2014]<-1150650; case.iNTSW$census[year(case.iNTSW$date)==2015]<-1171978
-case.iNTSW$incid_obs <-case.iNTSW$case_count*100000/case.iNTSW$census
-
-#----------calculated incidence of monthly typhoid
-case.typhiW <-tk_tbl(case.typhiW, preserve_index = TRUE, rename_index = "date") 
-case.typhiW$census[year(case.typhiW$date)==2000]<- 852054; case.typhiW$census[year(case.typhiW$date)==2001]<-873382
-case.typhiW$census[year(case.typhiW$date)==2002]<- 894710; case.typhiW$census[year(case.typhiW$date)==2003]<-916039
-case.typhiW$census[year(case.typhiW$date)==2004]<- 937367; case.typhiW$census[year(case.typhiW$date)==2005]<-958695
-case.typhiW$census[year(case.typhiW$date)==2006]<- 980023; case.typhiW$census[year(case.typhiW$date)==2007]<-1001352
-case.typhiW$census[year(case.typhiW$date)==2008]<-1022680; case.typhiW$census[year(case.typhiW$date)==2009]<-1044008
-case.typhiW$census[year(case.typhiW$date)==2010]<-1065337; case.typhiW$census[year(case.typhiW$date)==2011]<-1086665
-case.typhiW$census[year(case.typhiW$date)==2012]<-1107993; case.typhiW$census[year(case.typhiW$date)==2013]<-1129322
-case.typhiW$census[year(case.typhiW$date)==2014]<-1150650; case.typhiW$census[year(case.typhiW$date)==2015]<-1171978
-case.typhiW$incid_obs <-case.typhiW$case_count*100000/case.typhiW$census 
-
 #----------boxplots of weekly and month seasonal dynamics of iNTS and typhoid
 j <- seq(from=1, to=53, by=4)
 i <- seq(from=1, to=12, by=1)
-
-pox1 <- ggplot(subset(case.iNTSW, year(date)<2011), aes(x=week(date), y=incid_obs))  + 
-  geom_boxplot(aes( group=week(date)),color="orange2", fill="orange2", alpha=0.2) + 
-  labs(title="A",x="Week (Jan-Dec)", y = "Weekly iNTS incidence") + 
-  scale_x_discrete(limits = j) + 
-  ylim(c(0,25)) +
-  theme(axis.title.y = element_text(size = 11)) + 
-  theme(axis.title.x = element_text(size = 11)) + 
-  theme(axis.text.x = element_text(face="bold", size=11), axis.text.y = element_text(face="bold", size=11)) 
 
 pox2 <- ggplot(subset(case.iNTS, year(date)<2011), aes(x=month(date), y=incid_obs))  + 
   geom_boxplot(aes( group=month(date)), color="orange2", fill="orange2", alpha=0.2) + 
   labs(title="B",x="Month (Jan-Dec)", y = "Monthly iNTS incidence") + 
   scale_x_discrete(limits = i) + 
-  ylim(c(0,25)) +
-  theme(axis.title.y = element_text(size = 11)) + 
-  theme(axis.title.x = element_text(size = 11)) + 
-  theme(axis.text.x = element_text(face="bold", size=11), axis.text.y = element_text(face="bold", size=11)) 
-
-pox3 <- ggplot(subset(case.typhiW, year(date)>2010), aes(x=week(date), y=incid_obs))  + 
-  geom_boxplot(aes( group=week(date)), color="red2", fill="red2", alpha=0.2) + 
-  labs(title="C", x="Week (Jan-Dec)", y = "Weekly typhoid incidence") + 
-  scale_x_discrete(limits = j) + 
   ylim(c(0,25)) +
   theme(axis.title.y = element_text(size = 11)) + 
   theme(axis.title.x = element_text(size = 11)) + 
@@ -285,7 +241,7 @@ pox4 <- ggplot(subset(case.typhi, year(date)>2010), aes(x=month(date), y=incid_o
   theme(axis.title.x = element_text(size = 11)) + 
   theme(axis.text.x = element_text(face="bold", size=11), axis.text.y = element_text(face="bold", size=11)) 
 
-grid.arrange(grobs=list(pox1, pox2, pox3, pox4), ncol=2, nrow=2)
+grid.arrange(grobs=list(pox2, pox4), ncol=1, nrow=2)
 
 #----------distributions of typhi and iNTS cases by sex and age.
 case$sex[case$sex == ""] <- NA
@@ -332,7 +288,7 @@ agesex.p2<-datNoUnknowns %>%
 
 grid.arrange(agesex.p1,agesex.p2,nrow=2)
 
-#----------contour plots of (un)seasonal dynamics of iNTS and typhoid
+#----------contour plots of (de)seasonal dynamics of iNTS and typhoid
 case.iNTS.spi <- subset(case.iNTS, year(case.iNTS$date)<2011, select=c(date,incid_sea)) 
 case.iNTS.spi$month <- month(case.iNTS.spi$date)
 case.iNTS.spi$year <- year(case.iNTS.spi$date)
