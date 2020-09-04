@@ -16,3 +16,5 @@ both lower (with a 1 month lag) and higher (with a ≥4 months lag) temperatures
 known patterns of short and long cycle typhoid transmission. In contrast, the relative-risk of iNTS was
 only increased at lower temperatures, suggesting distinct transmission mechanisms. Environmental
 and sanitation control strategies may be different for iNTS compared to typhoid disease.
+
+published - https://www.nature.com/articles/s41598-019-56688-1
