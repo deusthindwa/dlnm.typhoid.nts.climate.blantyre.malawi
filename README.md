@@ -17,4 +17,4 @@ known patterns of short and long cycle typhoid transmission. In contrast, the re
 only increased at lower temperatures, suggesting distinct transmission mechanisms. Environmental
 and sanitation control strategies may be different for iNTS compared to typhoid disease.
 
-published - https://www.nature.com/articles/s41598-019-56688-1
+https://www.nature.com/articles/s41598-019-56688-1
