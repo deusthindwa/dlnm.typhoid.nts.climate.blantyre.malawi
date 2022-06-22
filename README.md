@@ -1,4 +1,4 @@
-https://www.nature.com/articles/s41598-019-56688-1
+https://doi.org/10.1038/s41598-019-56688-1
 
 # Distinct climate influences on the risk of typhoid compared to invasive non-typhoid Salmonella disease in Blantyre, Malawi
 
